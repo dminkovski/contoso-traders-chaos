@@ -20,7 +20,6 @@ import ProfileIcon from '../../assets/images/original/Contoso_Assets/Icons/profi
 import BagIcon from '../../assets/images/original/Contoso_Assets/Icons/cart_icon.svg'
 import UploadFile from '../uploadFile/uploadFile';
 import { clickAction, submitAction, handleThemeChange, getCartQuantity } from '../../actions/actions';
-import AuthB2CService from '../../services/authB2CService';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 // import Alert from "react-s-alert";
@@ -29,6 +28,7 @@ import logout_icon from "../../assets/images/original/Contoso_Assets/profile_pag
 // import delete_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/delete_icon.svg";
 import { CartService, ProductService } from '../../services';
 import './header.scss'
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 
 const StyledMenu = ((props) => (
   <Menu
@@ -54,7 +54,7 @@ function TopAppBar(props) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [searchUpload, setSearchUpload] = React.useState(false)
   const [mobileSearch, setMobileSearch] = React.useState(false)
-  const authService = new AuthB2CService();
+  const { instance } = useMsal();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -94,8 +94,6 @@ function TopAppBar(props) {
     // setMobileMoreAnchorEl(event.currentTarget);
     setMobileSearch(!mobileSearch)
   };
-
-  const { loggedIn } = props.userInfo;
 
   const getQuantity = useCallback(async () => {
     if (props.userInfo.token) {
@@ -137,13 +135,8 @@ function TopAppBar(props) {
   }, []);
 
   const onClickLogIn = async () => {
-    let user = await authService.login();
+    let user = await instance.loginPopup();
     if (user) {
-      user['loggedIn'] = true;
-      user['isB2c'] = true;
-      user['token'] = sessionStorage.getItem('msal.idtoken');
-      localStorage.setItem('state', JSON.stringify(user))
-      props.submitAction(user);
       window.location.reload()
     }
   }
@@ -151,7 +144,7 @@ function TopAppBar(props) {
     localStorage.clear();
 
     if (props.userInfo.isB2c) {
-      authService.logout();
+      instance.logout();
     }
     props.clickAction();
     history('/');
@@ -213,30 +206,6 @@ function TopAppBar(props) {
         <ListItemText primary="Personal Information" />
         <ListItemIcon className='justify-content-end'></ListItemIcon>
       </StyledMenuItem>
-      {/* <StyledMenuItem onClick={() => redirectUrl('/profile/orders')}>
-        <ListItemIcon>
-          <img src={my_orders_icon} alt=""/>
-        </ListItemIcon>
-        <ListItemText primary="My Orders" />
-        <ListItemIcon className='justify-content-end'>
-        </ListItemIcon>
-      </StyledMenuItem> */}
-      {/* <StyledMenuItem onClick={() => redirectUrl('/profile/wishlist')}>
-        <ListItemIcon>
-          <img src={my_wishlist_icon} alt=""/>
-        </ListItemIcon>
-        <ListItemText primary="My Wishlist" />
-        <ListItemIcon className='justify-content-end'>
-        </ListItemIcon>
-      </StyledMenuItem>
-      <StyledMenuItem onClick={() => redirectUrl('/profile/address')}>
-        <ListItemIcon>
-          <img src={my_address_book_icons} alt=""/>
-        </ListItemIcon>
-        <ListItemText primary="My Address Book" />
-        <ListItemIcon className='justify-content-end'>
-        </ListItemIcon>
-      </StyledMenuItem> */}
       <StyledMenuItem onClick={onClickLogout}>
         <ListItemIcon>
           <img src={logout_icon} alt="" />
@@ -304,7 +273,6 @@ function TopAppBar(props) {
           </div>
           {mobileSearch && <div className={`searchBar`} id="searchbox">
             <TextField
-              // label="Search by product name or search by image"
               placeholder='Search by product name or search by image'
               variant="outlined"
               fullWidth
@@ -333,45 +301,31 @@ function TopAppBar(props) {
               : null}
           </div>}
           <div style={{ flexGrow: 1 }} />
-          {loggedIn && loggedIn ? <div className={`sectionDesktop d-none d-md-block`}>
-            {/* <IconButton className='iconButton' aria-label="show 4 new mails" color="inherit" onClick={()=>redirectUrl('/wishlist')}>
-              <Badge badgeContent={0} color="secondary" overlap="rectangular">
-                <img src={WishlistIcon} alt="iconimage" />
-              </Badge>
-            </IconButton> */}
-            <IconButton
-              className='iconButton'
-              // edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <img src={ProfileIcon} alt="iconimage" />
-            </IconButton>
-            {/* <IconButton className='iconButton' aria-label="cart" color="inherit" onClick={()=>redirectUrl('/cart')} >
-              <Badge badgeContent={props.quantity} color="secondary" overlap="rectangular">
-                <img src={BagIcon} alt="iconimage" />
-              </Badge>
-            </IconButton> */}
-          </div> :
-            // null
-            process.env.REACT_APP_B2CCLIENTID && <>
-              <Button className='iconButton' aria-label="show 4 new mails" color="inherit" onClick={() => onClickLogIn()} >
-                Login
-              </Button></>
-          }
+          <AuthenticatedTemplate>
+            <div className={`sectionDesktop d-none d-md-block`}>
+              <IconButton
+                className='iconButton'
+                // edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <img src={ProfileIcon} alt="iconimage" />
+              </IconButton>
+            </div>
+          </AuthenticatedTemplate>
+          <UnauthenticatedTemplate>
+            <Button className='iconButton' aria-label="show 4 new mails" color="inherit" onClick={() => onClickLogIn()} >
+              Login
+            </Button>
+          </UnauthenticatedTemplate>
           <IconButton className='iconButton' aria-label="cart" color="inherit" onClick={() => redirectUrl('/cart')} >
             <Badge badgeContent={props.quantity} color="secondary" overlap="rectangular">
               <img src={BagIcon} alt="iconimage" />
             </Badge>
           </IconButton>
-          {/* #region Uncomment below lines to run dark mode tests */}
-          {/* <FormGroup className='theme-class'>
-            <FormControlLabel labelPlacement="start" control={<Switch aria-label='theme change' id="theme" color="primary" onChange={(e) => props.handleThemeChange(e.target.checked)}/>} label="Dark Mode" />
-          </FormGroup> */}
-          {/* #endregion */}
           <div className={`sectionMobile d-block d-md-none d-lg-none`}>
             <IconButton
               aria-label="show more"

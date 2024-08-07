@@ -15,6 +15,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { getCartQuantity } from "../../actions/actions";
 // import Slider from "../home/components/slider/slider";
 import './detail.scss'
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 
 function DetailContainer(props) {
     const { productId } = useParams();
@@ -25,6 +26,10 @@ function DetailContainer(props) {
     const [alert, setAlert] = React.useState({ open: false, type: 'error', message: '' })
     const relatedDetailProducts = []
     const [qty, setQty] = React.useState(1);
+
+    const isAuthenticated = useIsAuthenticated();
+    const { accounts } = useMsal();
+
 
 
     const getDetailPageData = useCallback( async (productId) => {
@@ -59,9 +64,9 @@ function DetailContainer(props) {
     }
 
 
-    const addProductToCart = async () => {
+    const addProductToCart = useCallback(async () => {
         var tempProps = JSON.parse(JSON.stringify(detailProduct));
-        if(!loggedIn){
+        if(!isAuthenticated){
             let cartItem = {
                 imageUrl: detailProduct.imageUrl,
                 name: detailProduct.name,
@@ -81,66 +86,39 @@ function DetailContainer(props) {
             }
             setLoadingRelated(true)
             getQuantity()
-        }else{
+        }else {
+            if (accounts.length > 0) {
+                const email = accounts[0].username;
+                tempProps.email = email;
+                tempProps.quantity = qty;
+                Object.preventExtensions(tempProps);
+                setDetailProduct(tempProps)
+                const productToCart = await CartService.addProduct(props.userInfo.token, tempProps)
 
-            const email = localStorage.getItem('state') ? JSON.parse(localStorage.getItem('state')).userName : null
-
-            tempProps.email = email;
-            tempProps.quantity = qty;
-            Object.preventExtensions(tempProps);
-
-            setDetailProduct(tempProps)
-
-
-            const productToCart = await CartService.addProduct(props.userInfo.token, tempProps)
-
-            if (productToCart.errMessage) {
-                return showErrorMessage(productToCart)
+                if (productToCart.errMessage) {
+                    return showErrorMessage(productToCart)
+                } else {
+                    // Show UI message and not server response
+                    showSuccesMessage("Added to shopping cart!");
+                    getQuantity();
+                }
             } else {
-                showSuccesMessage(productToCart)
-                getQuantity()
+                console.error("The account is missing.");
             }
+            
         }
-
-        // setLoadingRelated(true)
-
-        // setTimeout(async () => {
-        //     let relatedDetailProducts = await CartService
-        //         .getRelatedDetailProducts(this.props.userInfo.token, this.state.detailProduct.type.id);
-
-        //     if (relatedDetailProducts) {
-        //         relatedDetailProducts = relatedDetailProducts.recommendations.slice(0, 3);
-        //     }
-
-        //     this.setState({ relatedDetailProducts, loadingRelated: false });
-        // }, 2000);
-
-        // props.sumProductInState();
-    }
+    }, [accounts]);
 
     const showSuccesMessage = (data) => {
         setAlert({ open: true, type: 'success', message: data })
-        // Alert.success(data.message, {
-        //     position: "top",
-        //     effect: "scale",
-        //     beep: true,
-        //     timeout: 1500,
-        // });
     }
 
     const showErrorMessage = (data) => {
         setAlert({ open: true, type: 'error', message: data.errMessage })
-        // Alert.error(data.errMessage, {
-        //     position: "top",
-        //     effect: "scale",
-        //     beep: true,
-        //     timeout: 3000,
-        // });
     }
     const handleClose = () => {
         setAlert({ open: false, type: 'error', message: '' })
     }
-    const { loggedIn } = props.userInfo
     return (
         <div className="ProductContainerSectionMain">
             <Breadcrump parentPath='Products' parentUrl="/list/all-products" currentPath={detailProduct.name} />
@@ -152,7 +130,7 @@ function DetailContainer(props) {
                 </Snackbar>
                 {loading ? <LoadingSpinner /> :
                     <ProductDetails
-                        loggedIn={loggedIn}
+                        loggedIn={isAuthenticated}
                         detailProductData={detailProduct}
                         addProductToCart={addProductToCart}
                         loadingRelated={loadingRelated}
@@ -161,9 +139,6 @@ function DetailContainer(props) {
                     />
                 }
             </div>
-            <hr className="mb-3" />
-            {/* <Slider firstHeading="Explore Awesome Products" secondHeading="RECOMMENDED FOR YOU"/> */}
-            {/* <hr className="m-0" /> */}
         </div>
     );
 }

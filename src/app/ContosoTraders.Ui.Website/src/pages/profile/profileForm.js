@@ -17,19 +17,14 @@ import personal_information_icon from "../../assets/images/original/Contoso_Asse
 // import my_address_book_icons from "../../assets/images/original/Contoso_Assets/profile_page_assets/my_address_book_icons.svg";
 // import my_orders_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/my_orders_icon.svg";
 import Breadcrump from "../../components/breadcrumb/breadcrumb";
-import AuthB2CService from "../../services/authB2CService";
-import './profile.scss'
+import './profile.scss';
 
 const FormProfile = (props) => {
-  const authService = new AuthB2CService();
   const { page } = useParams()
   const [activeState, setActiveState] = React.useState(page);
   const onClickLogout = () => {
     localStorage.clear();
 
-    if (props.userInfo.isB2c) {
-      authService.logout();
-    }
     props.clickAction();
     props.history.push('/');
   }

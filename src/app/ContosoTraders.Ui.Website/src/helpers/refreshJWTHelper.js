@@ -5,7 +5,7 @@ import {
     setRefreshToken
 } from './tokensHelper';
 import { ConfigService } from '../services'
-import AuthB2CService from '../services/authB2CService';
+import { publicClientApplication } from '..';
 
 let failedRequestToRetry = [];
 let isAlreadyFetchingAccessToken = false;
@@ -77,14 +77,12 @@ const handleUnathenticatedRequestFromFake = async (errorResponse, authentication
 }
 
 const handleUnathenticatedRequestFromB2c = async (errorResponse, authenticationError) => {
-    const authB2CService = new AuthB2CService();
     let accessToken;
 
     try {
-        accessToken = await authB2CService.getToken();
+        accessToken = getAccessToken();
     } catch (e) {
-        await authB2CService.login();
-        accessToken = await authB2CService.getToken();
+        console.error(e);
    }
  
     if (!accessToken) {
@@ -104,4 +102,29 @@ const retryOriginalRequest = (errorResponse) => {
             resolve(axios(errorResponse.config));
         });
     });
+}
+
+const acquireAccessToken = async (msalInstance) => {
+
+    const activeAccount = msalInstance.getActiveAccount(); // This will only return a non-null value if you have logic somewhere else that calls the setActiveAccount API
+    const accounts = msalInstance.getAllAccounts();
+
+    if (!activeAccount && accounts.length === 0) {
+        /*
+        * User is not signed in. Throw error or wait for user to login.
+        * Do not attempt to log a user in outside of the context of MsalProvider
+        */   
+    }
+    const request = {
+        scopes: ["User.Read"],
+        account: activeAccount || accounts[0]
+    };
+
+    const authResult = await msalInstance.acquireTokenSilent(request);
+
+    return authResult.accessToken
+};
+
+export const getAccessToken = async () => {
+    return await acquireAccessToken(publicClientApplication);
 }

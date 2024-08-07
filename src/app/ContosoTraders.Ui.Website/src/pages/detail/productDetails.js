@@ -18,10 +18,10 @@ function ProductDetails(props) {
   };
 
   const discountOffer = (price) => {
-    let dicsount = price - ((price / 100) * 15)
+    let discount = price - ((price / 100) * 15)
     return (
       <span className="newprice">
-        ${parseInt(dicsount).toFixed(2)}
+        ${parseInt(discount).toFixed(2)}
       </span>
     )
   }
@@ -100,7 +100,7 @@ function ProductDetails(props) {
             </div>
             <div >
               {discountOffer(price)}
-              <span className="oldprice">{'$' + price.toFixed(2)}</span>
+              <span className="oldprice">{'$' + price?.toFixed(2)}</span>
               <span className="newoffer">15%Off</span>
             </div>
             <div>

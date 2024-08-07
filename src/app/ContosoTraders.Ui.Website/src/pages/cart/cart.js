@@ -8,10 +8,12 @@ import { connect } from "react-redux";
 import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
 import { getCartQuantity } from "../../actions/actions";
 import './cart.scss'
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { getAccessToken } from "../../helpers/refreshJWTHelper";
 
 function Cart(props) {
-  const textInput = React.useRef(null);
   const validCoupons = ['discount10','discount15'];
+
   const [coupon, setCoupon] = React.useState('DISCOUNT15');
   const [invalidCoupon, setInvalidCoupon] = React.useState(false);
   const [discountPrice, setDiscountPrice] = React.useState(0);
@@ -21,14 +23,23 @@ function Cart(props) {
   const [total, setTotal] = React.useState(0);
   const [grandtotal, setgrandTotal] = React.useState(0);
   const [delivery, setDelivery] = React.useState(10);
+
+  const textInput = React.useRef(null);
+
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isAuthenticated = useIsAuthenticated();
+  const {accounts} = useMsal();
 
   const getCartItems = useCallback(async () => {
-    setLoading(true)
+    console.log("getCartItems", isAuthenticated);
+    setLoading(true);
     let items;
-    //After logging take up cart detail from API
-    if (props.userInfo.loggedIn) {
-      let res = await CartService.getShoppingCart(props.userInfo.token)
+    if (isAuthenticated) {
+      const token = getAccessToken();
+      const userEmail = accounts?.[0]?.username;
+      let res = await CartService.getShoppingCart(userEmail, token)
       items = res ? res : []
     } else {
       items = localStorage.getItem('cart_items') ? JSON.parse(localStorage.getItem('cart_items')) : []
@@ -56,8 +67,8 @@ function Cart(props) {
   }, [props])
 
   useEffect(() => {
-    getCartItems()
-  }, [getCartItems]);
+    getCartItems();
+  }, [getCartItems, isAuthenticated]);
 
   useEffect(() => {
     if(total > 0){
@@ -69,7 +80,6 @@ function Cart(props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [discountPercentage]);
 
-  const location = useLocation();
   const currentCategory = location.pathname.split("/").pop().replaceAll('-', ' ');
   const checkDiscount = () => {
     if(validCoupons.includes(textInput.current.value.toLowerCase())){
@@ -93,8 +103,9 @@ function Cart(props) {
 
 
   const removeFromCart = async (item) => {
-    if (props.userInfo.loggedIn) {
-      await CartService.deleteProduct(item, props.userInfo.token)
+    if (isAuthenticated) {
+      const token = getAccessToken();
+      await CartService.deleteProduct(item, token);
     }else{
       let cartItem = localStorage.getItem('cart_items') ? JSON.parse(localStorage.getItem('cart_items')) : [];
       var filtered = cartItem.filter(function(el) { return el.name !== item.name; });
@@ -112,7 +123,7 @@ function Cart(props) {
             <h5 className="MyCartHeading">My Cart</h5>
             {cartItems.length > 0 && <>
               <h5 className="CartTopHeadTotal">Grand Total:</h5>
-              <h5 className="CartTopGrandTotal">${grandtotal.toFixed(2)}</h5>
+              <h5 className="CartTopGrandTotal">${grandtotal?.toFixed(2)}</h5>
               <Button variant="contained" className="PlaceOrderButton">Place Order</Button>
             </>}
           </div>
@@ -160,7 +171,7 @@ function Cart(props) {
                       {item.name}
                     </Grid>
                     <Grid item xs={12} className="Producttype">
-                      Price / Unit : ${item.price.toFixed(2)}
+                      Price / Unit : ${item.price?.toFixed(2)}
                     </Grid>
                     <Grid item xs={12} container className="align-items-center">
                       <Grid item lg={2} md={2} xs={12} className="Productqty">
@@ -168,13 +179,13 @@ function Cart(props) {
                         <QuantityPicker max={10} min={1} qty={item.quantity} detailProduct={item} token={props.userInfo.token} getCartItems={getCartItems} page="cart" loggedIn={props.userInfo.loggedIn} />
                       </Grid>
                       <Grid item lg={2} md={2} xs={12} className="Productprice">
-                        <b className="cart-hidden-detail mt-2 mb-2 mr-2 d-lg-none  d-inline-block">Price : </b>${item.price.toFixed(2)}
+                        <b className="cart-hidden-detail mt-2 mb-2 mr-2 d-lg-none  d-inline-block">Price : </b>${item.price?.toFixed(2)}
                       </Grid>
                       <Grid item lg={2} md={2} xs={12} className="Productprice">
                         <b className="cart-hidden-detail mt-2 mb-2 mr-2 d-lg-none  d-inline-block">Qty : </b>{item.quantity}
                       </Grid>
                       <Grid item lg={2} md={2} xs={12} className="Productprice">
-                        <b className="cart-hidden-detail mt-2 mb-2 mr-2 d-lg-none  d-inline-block">Subtotal : </b>${(item.price * item.quantity).toFixed(2)}
+                        <b className="cart-hidden-detail mt-2 mb-2 mr-2 d-lg-none  d-inline-block">Subtotal : </b>${(item.price * item.quantity)?.toFixed(2)}
                       </Grid>
                       {/* <Grid item lg={2} md={2} xs={6} className="Productlinks">
                       <Link to="#" className="wishlistlink">
@@ -241,25 +252,25 @@ function Cart(props) {
                       Sub Total
                     </Grid>
                     <Grid item xs={2} className="OrderSubPrice" data-testid="subtotal">
-                      ${total.toFixed(2)}
+                      ${total?.toFixed(2)}
                     </Grid>
                     <Grid item xs={10} className="OrderSubHeading">
                       Discount
                     </Grid>
                     <Grid item xs={2} className="OrderSubPrice text-success" data-testid="discount">
-                      -${discountPrice.toFixed(2)}
+                      -${discountPrice?.toFixed(2)}
                     </Grid>
                     <Grid item xs={10} className="OrderSubHeading">
                       Delivery Fee
                     </Grid>
                     <Grid item xs={2} className="OrderSubPrice">
-                      ${delivery.toFixed(2)}
+                      ${delivery?.toFixed(2)}
                     </Grid>
                     <Grid item xs={10} className="OrdertotalHeading">
                       Grand Total
                     </Grid>
                     <Grid item xs={2} className="OrderTotalPrice">
-                      ${grandtotal.toFixed(2)}
+                      ${grandtotal?.toFixed(2)}
                     </Grid>
                     <Grid item xs={12}>
                       <hr />
