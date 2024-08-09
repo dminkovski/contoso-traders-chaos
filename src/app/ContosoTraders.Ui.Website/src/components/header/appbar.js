@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { AppBar, InputAdornment, TextField, Button } from '@mui/material';
 //#region Uncomment below lines to run dark mode tests
 // import {FormGroup, FormControlLabel, Switch } from '@mui/material';
@@ -55,6 +55,7 @@ function TopAppBar(props) {
   const [searchUpload, setSearchUpload] = React.useState(false)
   const [mobileSearch, setMobileSearch] = React.useState(false)
   const { instance } = useMsal();
+  const dispatch = useDispatch();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -137,15 +138,17 @@ function TopAppBar(props) {
   const onClickLogIn = async () => {
     let user = await instance.loginPopup();
     if (user) {
+      user['loggedIn'] = true;
+      user['isB2c'] = true;
+      user['token'] = sessionStorage.getItem('msal.idtoken');
+      localStorage.setItem('state',JSON.stringify(user));
+      dispatch(submitAction(user));
       window.location.reload()
     }
   }
-  const onClickLogout = () => {
+  const onClickLogout = async () => {
     localStorage.clear();
-
-    if (props.userInfo.isB2c) {
-      instance.logout();
-    }
+    await instance.logout();
     props.clickAction();
     history('/');
   }

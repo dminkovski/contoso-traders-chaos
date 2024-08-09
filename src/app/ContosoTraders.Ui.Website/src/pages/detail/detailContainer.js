@@ -12,7 +12,7 @@ import ProductDetails from "./productDetails";
 import Breadcrump from "../../components/breadcrumb/breadcrumb";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Snackbar } from "@mui/material";
-import { getCartQuantity } from "../../actions/actions";
+import { getCartQuantity } from "app/actions/actions";
 // import Slider from "../home/components/slider/slider";
 import './detail.scss'
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";

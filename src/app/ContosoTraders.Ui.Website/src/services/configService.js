@@ -1,4 +1,5 @@
 import axios from "axios";
+import { publicClientApplication } from "..";
 
 // require("dotenv").config();
 const settingsUrl = "/api/settings";
@@ -15,7 +16,7 @@ const userEmail = localStorage.getItem('state') ? JSON.parse(localStorage.getIte
 const _HeadersConfig = (token, devspaces = undefined) => {
   const headers = token ? { Authorization: `Bearer ${token}` } : {};
   if(userEmail){
-    headers['x-tt-email'] = userEmail
+    headers['x-tt-email'] =userEmail
   }
   if (devspaces) {
     headers["azds-route-as"] = devspaces;

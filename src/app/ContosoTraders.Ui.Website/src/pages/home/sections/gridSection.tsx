@@ -1,15 +1,12 @@
+import { Card, CardActionArea, CardContent, Grid } from "@mui/material";
+import { LaptopGirl, LaptopPic } from "app/assets/images";
+
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Grid,
-  CardActionArea,
-} from "@mui/material";
-import laptopgirl from "../../../assets/images/original/Contoso_Assets/Grid_Products_Collection/banner_1.jpg";
-import laptoppic from "../../../assets/images/original/Contoso_Assets/Grid_Products_Collection/product_image.png";
 import { useNavigate } from "react-router-dom";
+
 function Gridsection() {
-  const history = useNavigate()
+  const history = useNavigate();
+  
   const startShopping = () => {
     history('/list/laptops')
   }
@@ -24,7 +21,7 @@ function Gridsection() {
           <Grid container spacing={4}>
             <Grid item lg={5} md={4} xs={12} className="lapsecimage-top">
               <img
-                src={laptopgirl}
+                src={LaptopGirl}
                 className="lapsecimage"
                 alt="girl with laptop"
               />
@@ -36,7 +33,7 @@ function Gridsection() {
                     <Card className="cardlap">
                       <CardActionArea onClick={() => startShopping()}>
                         <img
-                          src={laptoppic}
+                          src={LaptopPic}
                           className="laptopimage"
                           alt="girl with laptop"
                         />
@@ -53,7 +50,7 @@ function Gridsection() {
                     <Card className="cardlap">
                       <CardActionArea onClick={() => startShopping()}>
                         <img
-                          src={laptoppic}
+                          src={LaptopPic}
                           className="laptopimage"
                           alt="girl with laptop"
                         />
@@ -72,7 +69,7 @@ function Gridsection() {
                     <Card className="cardlap">
                       <CardActionArea onClick={() => startShopping()}>
                         <img
-                          src={laptoppic}
+                          src={LaptopPic}
                           className="laptopimage"
                           alt="girl with laptop"
                         />
@@ -89,7 +86,7 @@ function Gridsection() {
                     <Card className="cardlap">
                       <CardActionArea onClick={() => startShopping()}>
                         <img
-                          src={laptoppic}
+                          src={LaptopPic}
                           className="laptopimage"
                           alt="girl with laptop"
                         />

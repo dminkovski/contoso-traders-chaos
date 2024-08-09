@@ -3,7 +3,7 @@ import { ConfigService } from "./"
 require('../helpers/errorsHandler');
 
 const CartService = {
-    async getShoppingCart(userEmail, token) {
+    async getShoppingCart(token) {
         await ConfigService.loadSettings();
         if (ConfigService._byPassShoppingCartApi) {
             const items = await ConfigService._shoppingCartDao.find(token);
@@ -11,7 +11,7 @@ const CartService = {
         }
 
         try {
-            const response = await axios.get(`${ConfigService._apiUrlShoppingCart}/shoppingcart?userEmail=${userEmail}`, ConfigService.HeadersConfig(token));
+            const response = await axios.get(`${ConfigService._apiUrlShoppingCart}/shoppingcart`, ConfigService.HeadersConfig(token));
             return response.data;
         } catch(e) {
             return null;

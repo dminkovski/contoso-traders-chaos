@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
@@ -19,6 +19,7 @@ import ProfileIcon from '../../assets/images/original/Contoso_Assets/Icons/profi
 import BagIcon from '../../assets/images/original/Contoso_Assets/Icons/cart_icon.svg'
 import logout_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/logout_icon.svg";
 import { ReactComponent as Close } from '../../assets/images/icon-close.svg';
+import { submitAction } from '../../actions/actions';
 
 const CATEGORIES = {
     title: 'All Categories',
@@ -52,6 +53,7 @@ const CATEGORIES = {
 }
 
 const Header = (props) => {
+    const dispatch = useDispatch();
     const [isOpened, setIsOpened] = useState(false);
     const { instance } = useMsal();
     const locationPath = window.location.pathname;
@@ -69,10 +71,18 @@ const Header = (props) => {
     const onClickLogout = async () => {
         localStorage.clear();
         await instance.logout();
+        alert("Logout successful.");
     }
 
     const onClickLogIn = async () => {
-        await instance.loginPopup();
+        const user = await instance.loginPopup();
+        if (user) {
+            user['loggedIn'] = true;
+            user['isB2c'] = true;
+            user['token'] = sessionStorage.getItem('msal.idtoken');
+            localStorage.setItem('state',JSON.stringify(user));
+            dispatch(submitAction(user));
+        }      
     }
 
     useEffect(()=>{
