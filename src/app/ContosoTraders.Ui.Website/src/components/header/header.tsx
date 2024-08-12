@@ -1,25 +1,13 @@
+import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
+import LoginIcon from '@mui/icons-material/Login';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Badge, IconButton } from '@mui/material';
+import { BagIcon, CloseIcon, ControllersIcon, DesktopsIcon, LaptopsIcon, LogoutIcon, MobilesIcon, MonitorIcon, ProfileIcon } from "app/assets/images";
 import React, { useEffect, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
-
 import CategoriesComponent from '../dropdowns/categories';
-
-import { Badge, IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import LoginIcon from '@mui/icons-material/Login';
-
-import laptopsImg from '../../assets/images/original/Contoso_Assets/Mega_menu_dropdown_assets/laptop_icon.svg';
-import controllersImg from '../../assets/images/original/Contoso_Assets/Mega_menu_dropdown_assets/controllers_icon.svg';
-import desktopsImg from '../../assets/images/original/Contoso_Assets/Mega_menu_dropdown_assets/desktops_icon.svg';
-import mobilesImg from '../../assets/images/original/Contoso_Assets/Mega_menu_dropdown_assets/mobiles_icon.svg';
-import monitorImg from '../../assets/images/original/Contoso_Assets/Mega_menu_dropdown_assets/monitor_icon.svg';
-import ProfileIcon from '../../assets/images/original/Contoso_Assets/Icons/profile_icon.svg'
-import BagIcon from '../../assets/images/original/Contoso_Assets/Icons/cart_icon.svg'
-import logout_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/logout_icon.svg";
-import { ReactComponent as Close } from '../../assets/images/icon-close.svg';
-import { submitAction } from '../../actions/actions';
 
 const CATEGORIES = {
     title: 'All Categories',
@@ -27,27 +15,27 @@ const CATEGORIES = {
         {
             name: 'Laptops',
             url: '/list/laptops',
-            img: laptopsImg
+            img: LaptopsIcon
         },
         {
             name: 'Controllers',
             url: '/list/controllers',
-            img: controllersImg
+            img: ControllersIcon
         },
         {
             name: 'Desktops',
             url: '/list/desktops',
-            img: desktopsImg
+            img: DesktopsIcon
         },
         {
             name: 'Mobiles',
             url: '/list/mobiles',
-            img: mobilesImg
+            img: MobilesIcon
         },
         {
             name: 'Monitors',
             url: '/list/monitors',
-            img: monitorImg
+            img: MonitorIcon
         },
     ]
 }
@@ -77,11 +65,7 @@ const Header = (props) => {
     const onClickLogIn = async () => {
         const user = await instance.loginPopup();
         if (user) {
-            user['loggedIn'] = true;
-            user['isB2c'] = true;
-            user['token'] = sessionStorage.getItem('msal.idtoken');
-            localStorage.setItem('state',JSON.stringify(user));
-            dispatch(submitAction(user));
+           
         }      
     }
 
@@ -115,7 +99,7 @@ const Header = (props) => {
                     </button>
                 </div>
                 <button className="u-empty btn-close" onClick={()=>toggleIsOpened()}>
-                    <Close />
+                    <CloseIcon />
                 </button>
             </nav>
             <nav className="secondary-nav">
@@ -129,21 +113,21 @@ const Header = (props) => {
                             //   onClick={handleProfileMenuOpen}
                             color="inherit"
                         >
-                            <img src={ProfileIcon} alt="iconimage" />
+                            <ProfileIcon/>
                         </IconButton>
                     </Link>
                 </AuthenticatedTemplate>
                 <Link className="secondary-nav__cart" to="/cart">
                     <IconButton className='iconButton' aria-label="cart" color="inherit" >
                         <Badge badgeContent={props.quantity} color="secondary" overlap="rectangular">
-                            <img src={BagIcon} alt="iconimage" />
+                            <BagIcon/>
                         </Badge>
                     </IconButton>
                 </Link>
                 <AuthenticatedTemplate>
                     <div className="secondary-nav__login" onClick={()=>onClickLogout()}>
                     <IconButton className='iconButton' aria-label="cart" color="inherit" >
-                        <img src={logout_icon} alt="iconimage" />
+                        <LogoutIcon/>
                     </IconButton>
                     </div>
                 </AuthenticatedTemplate>
@@ -161,14 +145,7 @@ const Header = (props) => {
                 </UnauthenticatedTemplate>
                 <button className="u-empty" onClick={()=>toggleIsOpened()}>
                     {/* <Hamburger /> */}
-                    <IconButton
-                        aria-label="show more"
-                        aria-haspopup="true"
-                        // onClick={handleMobileMenuOpen}
-                        color="inherit"
-                    >
                         <MenuIcon />
-                    </IconButton>
                 </button>
             </nav>
         </header>
@@ -176,11 +153,5 @@ const Header = (props) => {
     );
 }
 
-const mapStateToProps = (state) => { 
-    return { 
-      theme :  state.login.theme,
-      quantity : state.login.quantity
-    }
-  };
 
-export default (connect(mapStateToProps)(Header));
+export default Header;

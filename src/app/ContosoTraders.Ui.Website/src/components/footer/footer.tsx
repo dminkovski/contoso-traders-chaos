@@ -1,11 +1,9 @@
-import React, { useCallback } from 'react'
-import { Link } from 'react-router-dom';
-import { Grid } from '@mui/material';
-
-import phoneLogo from '../../assets/images/original/Contoso_Assets/Icons/telephone_icon.svg'
-import emailLogo from '../../assets/images/original/Contoso_Assets/Icons/email_icon.svg'
-import { ReactComponent as Logo } from '../../assets/images/logo-horizontal.svg';
 import './footer.scss'
+
+import { Grid } from '@mui/material';
+import { EmailLogo, LogoHorizontal, PhoneLogo } from 'app/assets/images';
+import React, { useCallback, useState } from 'react'
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     const getLocation = useCallback(() => {
@@ -18,23 +16,23 @@ const Footer = () => {
     React.useEffect(() => {
         getLocation();
     }, [getLocation]);
-    const [lat, setLat] = React.useState(null);
-    const [lng, setLng] = React.useState(null);
-    const [status, setStatus] = React.useState(null);
-    const [location, setLocation] = React.useState(null);
+    const [lat, setLat] = useState(null);
+    const [lng, setLng] = useState(null);
+    const [status, setStatus] = useState<string | null>(null);
+    const [location, setLocation] = useState<string | null>(null);
 
 
     function showPosition(position) {
         setLat(position.coords.latitude);
         setLng(position.coords.longitude);
         let point = position.coords.latitude + ',' + position.coords.longitude
-        const geoApiUrlForAddress = `${process.env.REACT_APP_GEOAPIBASEURL}/Locations/${point}?key=${process.env.REACT_APP_BINGMAPSKEY}`;
+        const geoApiUrlForAddress = `${import.meta.env.VITE_REACT_APP_GEOAPIBASEURL}/Locations/${point}?key=${import.meta.env.VITE_REACT_APP_BINGMAPSKEY}`;
         fetch(geoApiUrlForAddress)
             .then(res => res.json())
             .then(dat => {
                 setStatus(null);
                 if ( dat.resourceSets[0]) {
-                    let address = dat.resourceSets[0].resources[0].address.locality + ', ' + dat.resourceSets[0].resources[0].address.countryRegion;
+                    let address:string = dat.resourceSets[0].resources[0].address.locality + ', ' + dat.resourceSets[0].resources[0].address.countryRegion;
                     setLocation(address)    
                 } else {
                     console.error(dat.errorDetails[0])
@@ -48,7 +46,7 @@ const Footer = () => {
             <Grid container className='footer-grid-container'>
                 <Grid item lg={4} xs={12} className='section-1'>
                     <Link to="/">
-                        <Logo />
+                        <LogoHorizontal />
                     </Link>
                     <p className='mt-2 text-justify'>
                         Contoso Traders is an e-commerce platform that specializes in electronic items. Our website offers a wide range of electronics, including smartphones, laptops, and other popular gadgets.
@@ -79,7 +77,7 @@ const Footer = () => {
                         <li>
                             <div className='contact-div' >
                                 <div className='logo-div' >
-                                    <img src={phoneLogo} alt='phone-logo' />
+                                    <img src={PhoneLogo} alt='phone-logo' />
                                 </div>
                                 <div className='list-element'>
                                     {' '}+123456768910
@@ -89,7 +87,7 @@ const Footer = () => {
                         <li>
                             <div className='contact-div' >
                                 <div className='logo-div' >
-                                    <img src={emailLogo} alt='email-logo' />
+                                    <img src={EmailLogo} alt='email-logo' />
                                 </div>
                                 <div className='list-element'>
                                     {' '}support@contosotraders.com

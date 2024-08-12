@@ -1,6 +1,6 @@
-import UserService from './userService';
 import CartService from './cartService';
-import ProductService from './productsService';
 import ConfigService from './configService';
+import ProductService from './productsService';
+import UserService from './userService';
 
 export { UserService, CartService, ProductService, ConfigService };

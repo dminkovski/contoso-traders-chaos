@@ -1,21 +1,15 @@
+import './detail.scss'
+
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { Alert, Snackbar } from "@mui/material";
 import React, { useCallback } from "react";
 import { connect } from 'react-redux';
-
-// import { animateScroll as scroll } from "react-scroll";
-import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
-// import Alert from "react-s-alert";
-
-// import Detail from "./detail";
-// import CartService from "../../services";
-import { ProductService, CartService } from '../../services';
-import ProductDetails from "./productDetails";
-import Breadcrump from "../../components/breadcrumb/breadcrumb";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert, Snackbar } from "@mui/material";
-import { getCartQuantity } from "app/actions/actions";
-// import Slider from "../home/components/slider/slider";
-import './detail.scss'
-import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+
+import Breadcrump from "../../components/breadcrumb/breadcrumb";
+import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
+import { CartService, ProductService } from '../../services';
+import ProductDetails from "./productDetails";
 
 function DetailContainer(props) {
     const { productId } = useParams();

@@ -14,8 +14,8 @@ import { LogLevel } from "@azure/msal-browser";
 const msalConfig = {
     auth: {
         validateAuthority: false,
-        clientId: process.env.REACT_APP_B2CCLIENTID || "NO_CLIENT_SPECIFIED",
-        authority: process.env.REACT_APP_B2CAUTHORITY || "https://login.microsoftonline.com",
+        clientId: import.meta.env.VITE_REACT_APP_B2CCLIENTID || "NO_CLIENT_SPECIFIED",
+        authority: import.meta.env.VITE_REACT_APP_B2CAUTHORITY || "https://login.microsoftonline.com",
         redirectUri: `${window.location.origin}`
     },
     cache: {
@@ -56,7 +56,7 @@ const msalConfig = {
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
 export const loginRequest = {
-    scopes: [ "openid", "profile", process.env.REACT_APP_B2CSCOPES]
+    scopes: [ "openid", "profile", import.meta.env.VITE_REACT_APP_B2CSCOPES]
 };
 
 /**

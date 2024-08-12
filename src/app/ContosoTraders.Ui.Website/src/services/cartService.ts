@@ -1,15 +1,10 @@
 import axios from "axios";
-import { ConfigService } from "./"
-require('../helpers/errorsHandler');
+
+import { ConfigService } from "."
 
 const CartService = {
     async getShoppingCart(token) {
         await ConfigService.loadSettings();
-        if (ConfigService._byPassShoppingCartApi) {
-            const items = await ConfigService._shoppingCartDao.find(token);
-            return items;
-        }
-
         try {
             const response = await axios.get(`${ConfigService._apiUrlShoppingCart}/shoppingcart`, ConfigService.HeadersConfig(token));
             return response.data;
@@ -55,11 +50,6 @@ const CartService = {
 
         const dataToPost = { detailProduct: productInfo, qty: detailProduct.quantity };
 
-        if (ConfigService._byPassShoppingCartApi) {
-            await ConfigService._shoppingCartDao.addItem(dataToPost);
-            return { message: "Product added on shopping cart" };
-        }
-
         const addProduct = axios.post(`${ConfigService._apiUrlShoppingCart}/shoppingcart`, cartItems, ConfigService.HeadersConfig(token))
             .then((response) => {
                 return response.data;
@@ -97,7 +87,7 @@ const CartService = {
     async deleteProduct(detailProduct, token) {
         await ConfigService.loadSettings();
 
-        let config = ConfigService.HeadersConfig(token);
+        let config:any = ConfigService.HeadersConfig(token);
         config.data = {
             // id: id,
             "cartItemId": detailProduct.cartItemId,

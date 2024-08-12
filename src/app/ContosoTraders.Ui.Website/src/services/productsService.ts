@@ -1,8 +1,7 @@
 import axios from "axios";
-import { ConfigService } from "./"
-const qs = require('qs');
-require('../helpers/errorsHandler');
+import qs from "qs";
 
+import { ConfigService } from "."
 
 const ProductService = { 
 
