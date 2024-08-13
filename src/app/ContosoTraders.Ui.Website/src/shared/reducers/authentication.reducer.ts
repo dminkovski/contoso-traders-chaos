@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { AppThunk } from 'app/config/store';
+import { setItemValue } from 'app/helpers/localStorage';
 
 export const initialState = {
   isAuthenticated: false,
@@ -10,20 +10,32 @@ export const initialState = {
 
 export type AuthenticationState = Readonly<typeof initialState>;
 
-export const dispatchIsLoading = (loading:boolean )=> (dispatch:Function ) => {
-  dispatch(setLoading(loading));
+export const dispatchIsLoading = (loading:boolean )=> {
+  return {
+    type: 'setLoading',
+    payload: { loading }
+  }
 }
 
-export const dispatchLogout: () => AppThunk = () => (dispatch:Function) => {
-  dispatch(logoutSession());
+export const dispatchLogout = () => {
+//  localStorage.clear();
+  return {
+    type: 'logoutSession',
+    payload: {}
+  }
 };
 
-export const dispatchLogin = (user: any, token: string) => (dispatch:Function) => {
+export const dispatchLogin = (user: any, token: string) => {
   const payload = {
     token,
     user
   };
-  dispatch(loginSession(payload));
+  setItemValue("token", token);
+  setItemValue("user", user);
+  return {
+    type: 'loginSession',
+    payload
+  }
 };
 
 export const AuthenticationSlice = createSlice({
@@ -36,6 +48,7 @@ export const AuthenticationSlice = createSlice({
       };
     },
     loginSession(state:AuthenticationState, action: PayloadAction<any>) {
+      console.log("loginSession", action);
       return {
         ...state,
         isAuthenticated: true,

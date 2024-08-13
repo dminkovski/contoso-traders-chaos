@@ -12,8 +12,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import { BagIcon, Logo, LogoutIcon, PersonalInformationIcon, ProfileIcon, SearchIconNew } from "app/assets/images";
 import { loginRequest } from 'app/config/authConfig';
+import getStore from 'app/config/store';
 import useAuthentication from 'app/hooks/useAuthentication';
-import { dispatchLogin, dispatchLogout } from 'app/shared/reducers/authentication.reducer';
+import { AuthenticationSlice, dispatchLogin, dispatchLogout } from 'app/shared/reducers/authentication.reducer';
 import React, { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -49,20 +50,21 @@ function TopAppBar(props) {
   useEffect(() => {
       if (!isAuthenticated && inProgress == "none" && !isLoading.current) {
       (isLoading as any).current = true;
-      dispatchLogout();
+      getStore().dispatch(AuthenticationSlice.actions.logoutSession());
       login();
       (isLoading as any).current = false;
       } else {
       if (accounts.length > 0 && inProgress == "none" && !isLoading.current){
           (isLoading as any).current = true;
-          dispatchLogout();
+          getStore().dispatch(AuthenticationSlice.actions.logoutSession());
           const account = accounts[0];
           instance.acquireTokenSilent({
           scopes: loginRequest.scopes,
           account
           }).then((response) => {
               if(response) {
-              dispatchLogin(account, response.accessToken);
+              const payload = {user: account, token: response.accessToken};
+              getStore().dispatch(AuthenticationSlice.actions.loginSession(payload));
               (isLoading as any).current = false;
               }
           });

@@ -1,12 +1,13 @@
+import { getItemValue } from 'app/helpers/localStorage';
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-import { IRootState } from './store';
-
-const setupAxiosInterceptors = (rootState:IRootState) => {
+const setupAxiosInterceptors = () => {
   const onRequestSuccess = (config: InternalAxiosRequestConfig) => {
     // do something with headers
-    const token = rootState.authentication.token;
-    const email = rootState.authentication.username;
+   
+    const token = getItemValue("token");
+    const user = getItemValue("user");
+    const email = user.username;
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

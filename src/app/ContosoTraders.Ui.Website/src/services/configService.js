@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { publicClientApplication } from "..";
+import { msalInstance } from "..";
 
 // require("dotenv").config();
 const settingsUrl = "/api/settings";

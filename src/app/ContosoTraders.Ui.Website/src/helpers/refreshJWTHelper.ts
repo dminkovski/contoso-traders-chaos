@@ -1,11 +1,12 @@
 import axios from 'axios';
+
+import { ConfigService } from '../services'
 import {
     getRefreshToken,
     setAccessToken,
     setRefreshToken
 } from './tokensHelper';
-import { ConfigService } from '../services'
-import { publicClientApplication } from '..';
+import { msalInstance } from '..';
 
 let failedRequestToRetry = [];
 let isAlreadyFetchingAccessToken = false;
@@ -126,5 +127,5 @@ const acquireAccessToken = async (msalInstance) => {
 };
 
 export const getAccessToken = async () => {
-    return await acquireAccessToken(publicClientApplication);
+    return await acquireAccessToken(msalInstance);
 }

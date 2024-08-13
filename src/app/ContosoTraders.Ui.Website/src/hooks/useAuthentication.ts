@@ -1,8 +1,8 @@
 import { AuthenticationResult } from "@azure/msal-browser";
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { loginRequest } from "app/config/authConfig";
-import { IRootState } from "app/config/store";
-import { AuthenticationState, dispatchIsLoading, dispatchLogin, dispatchLogout } from "app/shared/reducers/authentication.reducer";
+import getStore, { IRootState } from "app/config/store";
+import { AuthenticationSlice, AuthenticationState, dispatchIsLoading, dispatchLogin, dispatchLogout } from "app/shared/reducers/authentication.reducer";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -17,14 +17,15 @@ const useAuthentication = () => {
   const login = async ():Promise<void> => {
     console.log("useAuthentication - login");
     if ((!reduxIsAuthenticated || !user) && !isLoading){
-      dispatchIsLoading(true);
+      getStore().dispatch(AuthenticationSlice.actions.setLoading(true));
       const authResult:AuthenticationResult = await instance.loginPopup();
-      dispatchIsLoading(false);
+      getStore().dispatch(AuthenticationSlice.actions.setLoading(false));
       if (authResult) { 
         const user = authResult.account;
         const accessToken = authResult.accessToken;
-        dispatchLogin(user, accessToken);
-      } else {
+        const payload = {user, token: accessToken};
+        getStore().dispatch(AuthenticationSlice.actions.loginSession(payload));
+} else {
         console.error("There was an error during the MSAL Login Popup.");
       }
    

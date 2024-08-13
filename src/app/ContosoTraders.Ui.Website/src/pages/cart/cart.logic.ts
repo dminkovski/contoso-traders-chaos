@@ -70,7 +70,7 @@ const useCartLogic = () => {
 
   useEffect(() => {
     getCartItems();
-  }, [getCartItems]);
+  }, [getCartItems, isAuthenticated]);
 
   useEffect(() => {
     if(total > 0){
