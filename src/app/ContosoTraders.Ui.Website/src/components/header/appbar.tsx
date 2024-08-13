@@ -10,7 +10,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import { BagIcon, Logo, LogoutIcon, PersonalInformationIcon, ProfileIcon, SearchIconNew } from "app/assets/images";
-import { Link } from 'react-router-dom';
+import useAuthentication from 'app/hooks/useAuthentication';
+import { Link, useNavigate } from 'react-router-dom';
 
 const StyledMenu = ((props) => (
   <Menu
@@ -30,8 +31,11 @@ const StyledMenu = ((props) => (
 
 const StyledMenuItem = (MenuItem);
 function TopAppBar(props) {  
-  
   const menuId = 'primary-search-account-menu';
+  const { actions: {login, logout} } = useAuthentication();
+
+  const navigate = useNavigate();
+
   const renderMenu = (
     <StyledMenu
       id="profile-dropdown"
@@ -39,14 +43,14 @@ function TopAppBar(props) {
       keepMounted
       open={false}
     >
-      <StyledMenuItem onClick={() => console.log("should navigate")}>
+      <StyledMenuItem onClick={() => navigate("/profile")}>
         <ListItemIcon>
           <PersonalInformationIcon/>
         </ListItemIcon>
         <ListItemText primary="Personal Information" />
         <ListItemIcon className='justify-content-end'></ListItemIcon>
       </StyledMenuItem>
-      <StyledMenuItem onClick={()=> console.log("should logout")}>
+      <StyledMenuItem onClick={()=> logout()}>
         <ListItemIcon>
           <LogoutIcon/>
         </ListItemIcon>
@@ -75,7 +79,7 @@ function TopAppBar(props) {
                 aria-label="account of current user"
                 aria-controls={menuId}
                 aria-haspopup="true"
-                onClick={()=> console.log("profile menu")}
+                onClick={()=> navigate("/profile")}
                 color="inherit"
               >
                 <ProfileIcon/>
@@ -83,11 +87,11 @@ function TopAppBar(props) {
             </div>
           </AuthenticatedTemplate>
           <UnauthenticatedTemplate>
-            <Button className='iconButton' aria-label="show 4 new mails" color="inherit" onClick={() => console.log("should login")} >
+            <Button className='iconButton' aria-label="show 4 new mails" color="inherit" onClick={()=> login()} >
               Login
             </Button>
           </UnauthenticatedTemplate>
-          <IconButton className='iconButton' aria-label="cart" color="inherit" onClick={() => console.log("should navigate to cart")} >
+          <IconButton className='iconButton' aria-label="cart" color="inherit" onClick={() => navigate("/cart")} >
             <Badge badgeContent={props.quantity} color="secondary" overlap="rectangular">
               <BagIcon/>
             </Badge>

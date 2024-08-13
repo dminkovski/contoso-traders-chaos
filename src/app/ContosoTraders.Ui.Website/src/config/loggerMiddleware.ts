@@ -1,5 +1,5 @@
 const logger = () => (next:any) => (action:any) => {
-  const isDevEnv = process.env.REACT_ENVIRONMENT === "dev";
+  const isDevEnv = import.meta.env.VITE_REACT_ENVIRONMENT === "dev";
   if (isDevEnv) {
     const { type, payload, meta, error } = action;
 

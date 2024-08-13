@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import {  useLocation, useNavigate } from 'react-router-dom';
-import { CartService } from "app/services";
 import { useIsAuthenticated } from "@azure/msal-react";
 import { getAccessToken } from "app/helpers/refreshJWTHelper";
-import { useDispatch } from "react-redux";
-import { getCartQuantity, saveQuantity } from "app/shared/reducers/cart";
 import useAccessToken from "app/hooks/useAccessToken";
+import { CartService } from "app/services";
+import { getCartQuantity, saveQuantity } from "app/shared/reducers/cart";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const VALID_COUPONS:string[] = ['discount10','discount15'];
 const DEFAULT_DISCOUNT_PERCENTAGE  = 15;
@@ -62,7 +62,7 @@ const useCartLogic = () => {
       setCartItems(items)
       setLoading(false)
       let quantity = items.length;
-      saveQuantity(quantity);
+      //saveQuantity(quantity);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token])
 

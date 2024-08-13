@@ -1,6 +1,5 @@
 import "app/main.scss";
 
-import { AuthenticatedTemplate } from "@azure/msal-react";
 import { WarningIcon } from 'app/assets/images';
 import {Appbar, Footer, Header, HeaderMessage} from "app/components";
 import {
@@ -19,7 +18,7 @@ import {
 import React, { Fragment } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
-function App(props) {
+function App() {
     const location = useLocation();
     React.useEffect(() => {
         window.scrollTo(0, 0);

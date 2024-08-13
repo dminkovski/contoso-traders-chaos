@@ -1,22 +1,20 @@
-import {  createSlice, PayloadAction } from '@reduxjs/toolkit';
-
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { AppThunk } from 'app/config/store';
 
 export const initialState = {
-  loading: false,
   isAuthenticated: false,
-  token: '',
+  token: null,
   user: null,
 };
 
 export type AuthenticationState = Readonly<typeof initialState>;
 
 
-export const logout: () => AppThunk = () => (dispatch:Function) => {
+export const dispatchLogout: () => AppThunk = () => (dispatch:Function) => {
   dispatch(logoutSession());
 };
 
-export const login = (user: any, token: string) => (dispatch:Function) => {
+export const dispatchLogin = (user: any, token: string) => (dispatch:Function) => {
   const payload = {
     token,
     user

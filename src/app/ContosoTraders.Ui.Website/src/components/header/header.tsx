@@ -3,6 +3,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Badge, IconButton } from '@mui/material';
 import { BagIcon, CloseIcon, ControllersIcon, DesktopsIcon, LaptopsIcon, LogoutIcon, MobilesIcon, MonitorIcon, ProfileIcon } from "app/assets/images";
+import useAuthentication from 'app/hooks/useAuthentication';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -41,9 +42,8 @@ const CATEGORIES = {
 }
 
 const Header = (props) => {
-    const dispatch = useDispatch();
     const [isOpened, setIsOpened] = useState(false);
-    const { instance } = useMsal();
+    const {actions: {login, logout}} = useAuthentication();
     const locationPath = window.location.pathname;
 
     const setComponentVisibility = (width) => {
@@ -57,16 +57,11 @@ const Header = (props) => {
     }
 
     const onClickLogout = async () => {
-        localStorage.clear();
-        await instance.logout();
-        alert("Logout successful.");
+        await logout();
     }
 
     const onClickLogIn = async () => {
-        const user = await instance.loginPopup();
-        if (user) {
-           
-        }      
+        await login();    
     }
 
     useEffect(()=>{
