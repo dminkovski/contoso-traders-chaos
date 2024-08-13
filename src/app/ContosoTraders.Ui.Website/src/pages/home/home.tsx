@@ -1,3 +1,5 @@
+import "./home.scss";
+
 import React, { useEffect } from "react";
 
 import Finalsection from "./sections/finalSection";

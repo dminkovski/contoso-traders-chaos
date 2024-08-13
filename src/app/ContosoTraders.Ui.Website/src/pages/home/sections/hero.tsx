@@ -1,6 +1,5 @@
 import { HeroBG, HeroBG2, LocalMallIcon } from "app/assets/images";
-
-import Corousel from "../../../components/corousel/corousel";
+import Corousel from "app/components/corousel/corousel";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 

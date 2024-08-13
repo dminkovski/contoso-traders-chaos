@@ -67,7 +67,7 @@ function TopAppBar(props) {
         <Toolbar className='p-0'>
           <div className='headerLogo'>
             <Link to="/">
-              <img src={Logo} alt="" />
+              <Logo />
             </Link>
           </div>
           <div style={{ flexGrow: 1 }} />
