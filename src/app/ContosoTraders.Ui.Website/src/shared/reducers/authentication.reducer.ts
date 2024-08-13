@@ -5,10 +5,14 @@ export const initialState = {
   isAuthenticated: false,
   token: null,
   user: null,
+  isLoading: false,
 };
 
 export type AuthenticationState = Readonly<typeof initialState>;
 
+export const dispatchIsLoading = (loading:boolean )=> (dispatch:Function ) => {
+  dispatch(setLoading(loading));
+}
 
 export const dispatchLogout: () => AppThunk = () => (dispatch:Function) => {
   dispatch(logoutSession());
@@ -39,10 +43,16 @@ export const AuthenticationSlice = createSlice({
         user: action.payload.user
       };
     },
+    setLoading(state: AuthenticationState, action: PayloadAction<boolean>) {
+      return {
+        ...state,
+        isLoading: action.payload
+      };
+    }
   },
 });
 
-export const { logoutSession, loginSession } = AuthenticationSlice.actions;
+export const { logoutSession, loginSession, setLoading } = AuthenticationSlice.actions;
 
 
 export default AuthenticationSlice.reducer;

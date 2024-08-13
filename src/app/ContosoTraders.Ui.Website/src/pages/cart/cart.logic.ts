@@ -1,10 +1,12 @@
 import { useIsAuthenticated } from "@azure/msal-react";
+import { IRootState } from "app/config/store";
 import { getAccessToken } from "app/helpers/refreshJWTHelper";
 import useAccessToken from "app/hooks/useAccessToken";
 import { CartService } from "app/services";
+import { AuthenticationState } from "app/shared/reducers/authentication.reducer";
 import { getCartQuantity, saveQuantity } from "app/shared/reducers/cart";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const VALID_COUPONS:string[] = ['discount10','discount15'];
@@ -31,13 +33,13 @@ const useCartLogic = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const dispatch = useDispatch();
-  const isAuthenticated = useIsAuthenticated();
+  const isAuthenticated = useSelector((state:IRootState) => (state.authentication as AuthenticationState).isAuthenticated);
   const token = useAccessToken();
 
   const getCartItems = useCallback(async () => {
     setLoading(true);
     let items;
+    console.log("Get Cart items", isAuthenticated);
     if (isAuthenticated) {
       let res = await CartService.getShoppingCart(token);
       items = res ? res : []
@@ -64,7 +66,7 @@ const useCartLogic = () => {
       let quantity = items.length;
       //saveQuantity(quantity);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token])
+  }, [token, isAuthenticated])
 
   useEffect(() => {
     getCartItems();

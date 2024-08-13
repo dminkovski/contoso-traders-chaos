@@ -1,9 +1,20 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-const setupAxiosInterceptors = (store:any) => {
+import { IRootState } from './store';
+
+const setupAxiosInterceptors = (rootState:IRootState) => {
   const onRequestSuccess = (config: InternalAxiosRequestConfig) => {
     // do something with headers
+    const token = rootState.authentication.token;
+    const email = rootState.authentication.username;
     
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (email ) {
+      config.headers['x-tt-email'] = `${email}`;
+    }
+
     return config;
   };
   const onResponseSuccess = (response:any) => response;

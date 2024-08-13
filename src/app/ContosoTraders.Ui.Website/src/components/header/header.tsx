@@ -1,76 +1,19 @@
-import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
+import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 import LoginIcon from '@mui/icons-material/Login';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Badge, IconButton } from '@mui/material';
-import { BagIcon, CloseIcon, ControllersIcon, DesktopsIcon, LaptopsIcon, LogoutIcon, MobilesIcon, MonitorIcon, ProfileIcon } from "app/assets/images";
-import useAuthentication from 'app/hooks/useAuthentication';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { BagIcon, CloseIcon, LogoutIcon, ProfileIcon } from "app/assets/images";
+import CategoriesComponent from 'app/components/dropdowns/categories';
 import { Link } from 'react-router-dom';
 
-import CategoriesComponent from '../dropdowns/categories';
-
-const CATEGORIES = {
-    title: 'All Categories',
-    categorylist: [
-        {
-            name: 'Laptops',
-            url: '/list/laptops',
-            img: LaptopsIcon
-        },
-        {
-            name: 'Controllers',
-            url: '/list/controllers',
-            img: ControllersIcon
-        },
-        {
-            name: 'Desktops',
-            url: '/list/desktops',
-            img: DesktopsIcon
-        },
-        {
-            name: 'Mobiles',
-            url: '/list/mobiles',
-            img: MobilesIcon
-        },
-        {
-            name: 'Monitors',
-            url: '/list/monitors',
-            img: MonitorIcon
-        },
-    ]
-}
+import useHeaderLogic from './header.logic';
 
 const Header = (props) => {
-    const [isOpened, setIsOpened] = useState(false);
-    const {actions: {login, logout}} = useAuthentication();
-    const locationPath = window.location.pathname;
-
-    const setComponentVisibility = (width) => {
-        if (width > 1280) {
-            setIsOpened(false);
-        }
-    }
-
-    const toggleIsOpened = () => {
-        setIsOpened(o => !o);
-    }
-
-    const onClickLogout = async () => {
-        await logout();
-    }
-
-    const onClickLogIn = async () => {
-        await login();    
-    }
-
-    useEffect(()=>{
-        setComponentVisibility(document.documentElement.clientWidth);
-        window.addEventListener('resize', function () {
-            setComponentVisibility(document.documentElement.clientWidth);
-        });
-    }, []);
-
+    const { state, actions, data} = useHeaderLogic();
+    const {CATEGORIES, locationPath} = data;
+    const {isOpened} = state;
+    const {logout, toggleIsOpened, login } = actions;
+  
     return (
         <header className="header">
             <CategoriesComponent categories={CATEGORIES} />
@@ -89,7 +32,7 @@ const Header = (props) => {
                     <Link className="main-nav__item" to="/profile/personal">
                         Profile
                     </Link>
-                    <button className="u-empty main-nav__item" onClick={()=>onClickLogout()}>
+                    <button className="u-empty main-nav__item" onClick={()=>logout()}>
                         Logout
                     </button>
                 </div>
@@ -120,14 +63,14 @@ const Header = (props) => {
                     </IconButton>
                 </Link>
                 <AuthenticatedTemplate>
-                    <div className="secondary-nav__login" onClick={()=>onClickLogout()}>
+                    <div className="secondary-nav__login" onClick={()=>logout()}>
                     <IconButton className='iconButton' aria-label="cart" color="inherit" >
                         <LogoutIcon/>
                     </IconButton>
                     </div>
                 </AuthenticatedTemplate>
                 <UnauthenticatedTemplate>
-                    <div className="secondary-nav__login" onClick={()=>onClickLogIn()}>
+                    <div className="secondary-nav__login" onClick={()=>login()}>
                         <IconButton
                             aria-label="show more"
                             aria-haspopup="true"
