@@ -45,7 +45,7 @@ const QuantityPicker = ({
       if (isAuthenticated) {
         const response = await CartService.updateQuantity(detailProduct, value);
         if (response) {
-          //getCartItems();
+          getCartItems();
         }
       } else {
         let cartItems = JSON.parse(localStorage.getItem('cart_items') || '[]');

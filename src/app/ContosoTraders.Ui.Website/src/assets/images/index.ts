@@ -26,3 +26,5 @@ export { default as LaptopsIcon } from "./original/Contoso_Assets/Mega_menu_drop
 export { default as MobilesIcon } from "./original/Contoso_Assets/Mega_menu_dropdown_assets/mobiles_icon.svg";
 export { default as MonitorIcon } from "./original/Contoso_Assets/Mega_menu_dropdown_assets/monitor_icon.svg";
 export { default as OfferBanner} from "./original/Contoso_Assets/product_page_assets/collection_page_banner.jpg";
+export {default as AddToBagIcon} from "./original/Contoso_Assets/product_page_assets/add_to_bag_icon.svg";
+export {default as DiscountImage}  from "./original/Contoso_Assets/product_page_assets/discount.png";

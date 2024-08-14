@@ -7,10 +7,10 @@ import {
   AboutUs,
   Arrivals,
   Cart,
-  Detail,
   ErrorPage,
   Home,
   List,
+  Product,
   Profile,
   RefundPolicy,
   SuggestedProductsList,
@@ -55,7 +55,7 @@ function App() {
             />
             <Route
               path="/product/detail/:productId"
-              element={<Detail/>}
+              element={<Product/>}
             />
             <Route path="/refund-policy" element={<RefundPolicy/>} />
             <Route path="/terms-of-service" element={<TermsOfService/>} />

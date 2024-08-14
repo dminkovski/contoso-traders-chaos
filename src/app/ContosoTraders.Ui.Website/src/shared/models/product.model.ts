@@ -1,4 +1,7 @@
 export interface Product {
+  brand?: any;
+  features?: any;
+  stockUnits?: number;
   id: string;
   name: string;
   price: number;

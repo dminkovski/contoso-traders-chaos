@@ -60,7 +60,6 @@ const useCartLogic = () => {
       setLoading(false)
       let quantity = items.length;
       //saveQuantity(quantity);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
   useEffect(() => {
