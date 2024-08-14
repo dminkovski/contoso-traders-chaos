@@ -2,6 +2,7 @@ import "app/main.scss";
 
 import { WarningIcon } from 'app/assets/images';
 import {Appbar, Footer, Header, HeaderMessage} from "app/components";
+import useAuthentication from "app/hooks/useAuthentication";
 import {
   AboutUs,
   Arrivals,
@@ -15,7 +16,7 @@ import {
   SuggestedProductsList,
   TermsOfService,
 } from "app/pages";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
@@ -23,6 +24,14 @@ function App() {
     React.useEffect(() => {
         window.scrollTo(0, 0);
     }, [location.pathname]);
+    
+    
+    const { actions: { loginSilent} } = useAuthentication();
+
+    // Start a background login process
+    useEffect(() => {
+          loginSilent();
+    }, []);
 
     return (
       <div className={`App light`}>

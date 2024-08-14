@@ -48,7 +48,6 @@ export const AuthenticationSlice = createSlice({
       };
     },
     loginSession(state:AuthenticationState, action: PayloadAction<any>) {
-      console.log("loginSession", action);
       return {
         ...state,
         isAuthenticated: true,

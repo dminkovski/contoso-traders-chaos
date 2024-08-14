@@ -1,7 +1,6 @@
 import './header.scss'
 
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
-import { useIsAuthenticated, useMsal } from '@azure/msal-react';
 import { AppBar, Button } from '@mui/material';
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
@@ -11,11 +10,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import { BagIcon, Logo, LogoutIcon, PersonalInformationIcon, ProfileIcon, SearchIconNew } from "app/assets/images";
-import { loginRequest } from 'app/config/authConfig';
-import getStore from 'app/config/store';
 import useAuthentication from 'app/hooks/useAuthentication';
-import { AuthenticationSlice, dispatchLogin, dispatchLogout } from 'app/shared/reducers/authentication.reducer';
-import React, { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const StyledMenu = ((props) => (
@@ -40,37 +35,6 @@ function TopAppBar(props) {
   const { actions: {login, logout} } = useAuthentication();
 
   const navigate = useNavigate();
-
-  
-  
-  const isAuthenticated = useIsAuthenticated();
-  const { instance, accounts, inProgress } = useMsal();
-  const isLoading = useRef<boolean>(false);
-  // Start a Login process if the user is not authenticated and there is no login process already going on.
-  useEffect(() => {
-      if (!isAuthenticated && inProgress == "none" && !isLoading.current) {
-      (isLoading as any).current = true;
-      getStore().dispatch(AuthenticationSlice.actions.logoutSession());
-      login();
-      (isLoading as any).current = false;
-      } else {
-      if (accounts.length > 0 && inProgress == "none" && !isLoading.current){
-          (isLoading as any).current = true;
-          getStore().dispatch(AuthenticationSlice.actions.logoutSession());
-          const account = accounts[0];
-          instance.acquireTokenSilent({
-          scopes: loginRequest.scopes,
-          account
-          }).then((response) => {
-              if(response) {
-              const payload = {user: account, token: response.accessToken};
-              getStore().dispatch(AuthenticationSlice.actions.loginSession(payload));
-              (isLoading as any).current = false;
-              }
-          });
-      }
-      }
-  }, [isAuthenticated, inProgress, accounts]);
 
   const renderMenu = (
     <StyledMenu

@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import { LogLevel } from "@azure/msal-browser";
+import { LogLevel, PublicClientApplication } from "@azure/msal-browser";
 
 /**
  * Configuration object to be passed to MSAL instance on creation. 
@@ -66,5 +66,34 @@ export const loginRequest = {
 export const graphConfig = {
     graphMeEndpoint: "https://graph.microsoft.com/v1.0/me",
 };
+
+// Create MSAL Instance
+export const msalInstance = new PublicClientApplication(msalConfig);
+
+
+export  interface MsalAuthenticationPayload {
+    accessToken: string;
+    account: any;
+    authority: string;
+    cloudGraphHostName: string;
+    code?: string;
+    correlationId: string;
+    expiresOn: Date;
+    extExpiresOn: Date;
+    familyId: string;
+    fromCache: boolean;
+    fromNativeBroker: boolean;
+    idToken: string;
+    idTokenClaims: any;
+    msGraphHost: string;
+    refreshOn?: Date;
+    requestId: string;
+    scopes: string[];
+    state: string;
+    tenantId: string;
+    tokenType: string;
+    uniqueId: string;
+}
+
 
 export default msalConfig;

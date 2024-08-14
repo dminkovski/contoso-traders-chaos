@@ -1,3 +1,4 @@
+import { msalInstance } from 'app/config/msalConfig';
 import axios from 'axios';
 
 import { ConfigService } from '../services'
@@ -6,7 +7,6 @@ import {
     setAccessToken,
     setRefreshToken
 } from './tokensHelper';
-import { msalInstance } from '..';
 
 let failedRequestToRetry = [];
 let isAlreadyFetchingAccessToken = false;

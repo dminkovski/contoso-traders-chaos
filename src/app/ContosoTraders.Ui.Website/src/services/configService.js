@@ -1,6 +1,5 @@
+import { msalInstance } from "app/config/msalConfig";
 import axios from "axios";
-
-import { msalInstance } from "..";
 
 // require("dotenv").config();
 const settingsUrl = "/api/settings";

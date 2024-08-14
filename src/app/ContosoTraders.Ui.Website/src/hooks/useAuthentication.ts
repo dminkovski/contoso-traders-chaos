@@ -1,36 +1,35 @@
 import { AuthenticationResult } from "@azure/msal-browser";
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { loginRequest } from "app/config/authConfig";
+import { loginRequest } from "app/config/msalConfig";
 import getStore, { IRootState } from "app/config/store";
-import { AuthenticationSlice, AuthenticationState, dispatchIsLoading, dispatchLogin, dispatchLogout } from "app/shared/reducers/authentication.reducer";
-import React, { useEffect, useRef, useState } from "react";
+import { AuthenticationSlice, AuthenticationState, dispatchLogout } from "app/shared/reducers/authentication.reducer";
 import { useSelector } from "react-redux";
 
 const useAuthentication = () => {
   const user = useSelector((state:IRootState) => (state.authentication as AuthenticationState).user);
-  const reduxIsAuthenticated = useSelector((state:IRootState) => (state.authentication as AuthenticationState).isAuthenticated);
   const isAuthenticated = useIsAuthenticated();
-  const isLoading = useSelector((state:IRootState) => (state.authentication as AuthenticationState).isLoading);
 
-  const { instance } = useMsal();
+  const { instance, accounts } = useMsal();
 
-  const login = async ():Promise<void> => {
-    console.log("useAuthentication - login");
-    if ((!reduxIsAuthenticated || !user) && !isLoading){
-      getStore().dispatch(AuthenticationSlice.actions.setLoading(true));
-      const authResult:AuthenticationResult = await instance.loginPopup();
-      getStore().dispatch(AuthenticationSlice.actions.setLoading(false));
-      if (authResult) { 
-        const user = authResult.account;
-        const accessToken = authResult.accessToken;
-        const payload = {user, token: accessToken};
-        getStore().dispatch(AuthenticationSlice.actions.loginSession(payload));
-} else {
-        console.error("There was an error during the MSAL Login Popup.");
-      }
-   
+  // Tries to acquire the token using the existing account - response is handled by callback: msalInstance.addEventCallback
+  const loginSilent = async():Promise<void> => {
+    if (accounts.length > 0){
+      getStore().dispatch(AuthenticationSlice.actions.logoutSession());
+      const account = accounts[0];
+      await instance.acquireTokenSilent({
+        scopes: loginRequest.scopes,
+        account
+      });
+    } else {
+      console.warn("No logged in MSAL account present. Background token acquisition is not possible.");
     }
-  } 
+  };
+
+  // Tries to login the user using the MSAL popup - response is handled by callback: msalInstance.addEventCallback
+  const login = async ():Promise<void> => {
+      getStore().dispatch(AuthenticationSlice.actions.logoutSession());
+      await instance.loginPopup();
+    } 
 
   const logout = async ():Promise<void> => {
     await instance.logout();
@@ -45,7 +44,8 @@ const useAuthentication = () => {
     },
     actions: {
       login,
-      logout
+      logout,
+      loginSilent
     }
   }
 

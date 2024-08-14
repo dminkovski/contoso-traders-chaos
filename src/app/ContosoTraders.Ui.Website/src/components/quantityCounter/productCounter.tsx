@@ -1,91 +1,109 @@
-import React, { Component } from 'react';
-import { CartService } from '../../services';
 import './productCounter.scss'
 
-export default class QuantityPicker extends Component {
+import { IRootState } from 'app/config/store';
+import { CartService } from 'app/services';
+import { CartItem } from 'app/shared/models';
+import { AuthenticationState } from 'app/shared/reducers/authentication.reducer';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-  constructor(props) {
-    super(props);
-
-    this.state = { value: this.props.qty || this.props.min, disableDec: true, disableInc: false }
-    this.increment = this.increment.bind(this);
-    this.decrement = this.decrement.bind(this);
-  }
-  //cartItemId
-
-  componentDidMount() {
-    if(this.state.value > this.props.min){
-      this.setState({ disableDec: false });
-    }
-    if(this.state.value >= this.props.max){
-      this.setState({ disableInc: true });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.value !== this.state.value && this.props?.page === 'cart') {
-      this.updateProductQty()
-    }
-    if (this.props.setQty) {
-      this.props.setQty(this.state.value)
-    }
-  }
-
-  async updateProductQty() {
-    if(this.props.loggedIn){
-      let response = await CartService.updateQuantity(this.props.detailProduct, this.state.value, this.props.token)
-      if (response) {
-        this.props.getCartItems()
-      }
-    }else{
-      let cart_items = JSON.parse(localStorage.getItem('cart_items'));
-      let objIndex = cart_items.findIndex((obj => obj.productId === this.props.detailProduct.productId));
-      cart_items[objIndex].quantity = this.state.value
-      localStorage.setItem('cart_items',JSON.stringify(cart_items))
-      this.props.getCartItems()
-    }
-  }
-
-  increment() {
-    const plusState = this.state.value + 1;
-    if (this.state.value < this.props.max) {
-      this.setState({ value: plusState });
-      this.setState({ disable: false });
-    }
-    if (this.state.value === (this.props.max - 1)) {
-      this.setState({ disableInc: true });
-    }
-    if (this.state.value === this.props.min) {
-      this.setState({ disableDec: false });
-    }
-  }
-
-  decrement() {
-    const minusState = this.state.value - 1;
-    if (this.state.value > this.props.min) {
-      this.setState({ value: minusState });
-      if (this.state.value === this.props.min + 1) {
-        this.setState({ disableDec: true });
-      }
-    } else {
-      this.setState({ value: this.props.min });
-    }
-    if (this.state.value === this.props.max) {
-      this.setState({ disableInc: false });
-    }
-  }
-
-  render() {
-    const { disableDec, disableInc } = this.state;
-
-    return (
-      <span>
-        <span className="quantity-picker">
-          <button className={`${disableDec ? 'mod-disable ' : ''}quantity-modifier modifier-left`} onClick={this.decrement}>-</button>
-          <input className="quantity-display" type="text" value={this.state.value} readOnly />
-          <button className={`${disableInc ? 'mod-disable ' : ''}quantity-modifier modifier-right`} onClick={this.increment}>+</button>
-        </span>
-      </span>
-    );
-  }
+interface QuantityPickerProps {
+  qty?: number;
+  min: number;
+  max: number;
+  page?: string;
+  detailProduct: CartItem;
+  setQty?: (value: number) => void;
+  getCartItems: () => void;
 }
+
+const QuantityPicker = ({
+  qty,
+  min,
+  max,
+  page,
+  detailProduct,
+  setQty,
+  getCartItems
+}:QuantityPickerProps):JSX.Element => {
+  const [value, setValue] = useState<number>(qty || min);
+  const disableDec = value <= min;
+  const disableInc = value >= max;
+  const isAuthenticated = useSelector((state:IRootState) => (state.authentication as AuthenticationState).isAuthenticated);
+
+  useEffect(() => {
+    if (page === 'cart') {
+      updateProductQty();
+    }
+    if (setQty) {
+      setQty(value);
+    }
+  }, [value]);
+
+  const updateProductQty = useCallback(async () => {
+    if (page === 'cart') {
+      if (isAuthenticated) {
+        const response = await CartService.updateQuantity(detailProduct, value);
+        if (response) {
+          //getCartItems();
+        }
+      } else {
+        let cartItems = JSON.parse(localStorage.getItem('cart_items') || '[]');
+        const itemIndex = cartItems.findIndex(
+          (item: any) => item.productId === detailProduct.productId
+        );
+        if (itemIndex !== -1) {
+          cartItems[itemIndex].quantity = value;
+          localStorage.setItem('cart_items', JSON.stringify(cartItems));
+          getCartItems();
+        }
+      }
+    }
+
+    if (setQty) {
+      setQty(value);
+    }
+  }, [value, page, isAuthenticated, detailProduct, getCartItems, setQty]);
+
+
+
+  useEffect(() => {
+    updateProductQty();
+  }, [value, updateProductQty]);
+
+  const increment = () => {
+    if (value < max) {
+      setValue(value + 1);
+    }
+  };
+
+  const decrement = () => {
+    if (value > min) {
+      setValue(value - 1);
+    }
+  };
+
+  return (
+    <span>
+      <span className="quantity-picker">
+        <button
+          className={`${disableDec ? 'mod-disable ' : ''}quantity-modifier modifier-left`}
+          onClick={decrement}
+          disabled={disableDec}
+        >
+          -
+        </button>
+        <input className="quantity-display" type="text" value={value} readOnly />
+        <button
+          className={`${disableInc ? 'mod-disable ' : ''}quantity-modifier modifier-right`}
+          onClick={increment}
+          disabled={disableInc}
+        >
+          +
+        </button>
+      </span>
+    </span>
+  );
+};
+
+export default QuantityPicker;

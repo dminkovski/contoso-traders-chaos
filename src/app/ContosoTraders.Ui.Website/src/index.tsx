@@ -1,34 +1,38 @@
 import './index.css';
 
-import { EventMessage, EventType, PublicClientApplication } from '@azure/msal-browser';
+import { EventMessage, EventType } from '@azure/msal-browser';
 import { MsalProvider } from "@azure/msal-react";
-import msalConfig from "app/config/authConfig";
 import setupAxiosInterceptors from 'app/config/axiosInterceptors';
+import { MsalAuthenticationPayload, msalInstance } from "app/config/msalConfig";
 import reportWebVitals from 'app/config/reportWebVitals';
 import getStore from 'app/config/store';
-import { AuthenticationSlice, dispatchLogin } from 'app/shared/reducers/authentication.reducer';
+import { AuthenticationSlice } from 'app/shared/reducers/authentication.reducer';
 import React from 'react';
 import { Container, createRoot } from 'react-dom/client';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from "react-router-dom";
 
 import App from './app';
 
-export const msalInstance = new PublicClientApplication(msalConfig);
 msalInstance.addEventCallback((message: EventMessage) => {
   if (message.eventType === EventType.LOGIN_SUCCESS || message.eventType === EventType.ACQUIRE_TOKEN_SUCCESS) {
-      console.log("msalInstance addEventCallback");
-      const payload = {user: (message.payload as any)?.account, token: (message.payload as any)?.accessToken};
-      getStore().dispatch(AuthenticationSlice.actions.loginSession(payload));
+      const msalPayload = message?.payload as MsalAuthenticationPayload;
+      if (msalPayload && 'accessToken' in msalPayload && 'account' in msalPayload) {
+        const {username, tenantId, name } = msalPayload.account;
+        const user = { username, tenantId, name };
+        const payload = {user, token: msalPayload.accessToken};
+        getStore().dispatch(AuthenticationSlice.actions.loginSession(payload));
+      }
+  } else if(message.eventType.includes("Failure")) {
+      console.error(message);
   }
 });
-
-const store = getStore();
-setupAxiosInterceptors();
 
 
 const initialize = async () => {
   await msalInstance.initialize();    
+  const store = getStore();
+  setupAxiosInterceptors();
     
   const rootElem = document.getElementById('root') as Container;
   const root = createRoot(rootElem);
@@ -45,6 +49,7 @@ const initialize = async () => {
     </React.StrictMode>
   );
 }
+
 initialize();
 
 

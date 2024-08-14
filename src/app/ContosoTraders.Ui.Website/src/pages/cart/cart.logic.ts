@@ -1,12 +1,9 @@
-import { useIsAuthenticated } from "@azure/msal-react";
 import { IRootState } from "app/config/store";
 import { getAccessToken } from "app/helpers/refreshJWTHelper";
-import useAccessToken from "app/hooks/useAccessToken";
 import { CartService } from "app/services";
 import { AuthenticationState } from "app/shared/reducers/authentication.reducer";
-import { getCartQuantity, saveQuantity } from "app/shared/reducers/cart";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const VALID_COUPONS:string[] = ['discount10','discount15'];
@@ -34,14 +31,12 @@ const useCartLogic = () => {
   const location = useLocation();
 
   const isAuthenticated = useSelector((state:IRootState) => (state.authentication as AuthenticationState).isAuthenticated);
-  const token = useAccessToken();
 
   const getCartItems = useCallback(async () => {
     setLoading(true);
     let items;
-    console.log("Get Cart items", isAuthenticated);
     if (isAuthenticated) {
-      let res = await CartService.getShoppingCart(token);
+      let res = await CartService.getShoppingCart();
       items = res ? res : []
     } else {
       items = localStorage.getItem('cart_items') ? JSON.parse(localStorage.getItem('cart_items') as string) : []
@@ -66,7 +61,7 @@ const useCartLogic = () => {
       let quantity = items.length;
       //saveQuantity(quantity);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, isAuthenticated])
+  }, [isAuthenticated])
 
   useEffect(() => {
     getCartItems();
@@ -113,8 +108,7 @@ const useCartLogic = () => {
 
   const removeFromCart = async (item:any) => {
     if (isAuthenticated) {
-      const token = getAccessToken();
-      await CartService.deleteProduct(item, token);
+      await CartService.deleteProduct(item);
     }else{
       let cartItem = localStorage.getItem('cart_items') ? JSON.parse(localStorage.getItem('cart_items') as string) : [];
       var filtered = cartItem.filter(function(el:any) { return el.name !== item.name; });
@@ -141,7 +135,6 @@ const useCartLogic = () => {
       parentPath, 
       parentUrl,
       isAuthenticated,
-      token
     },
     refs: {
       textInput
