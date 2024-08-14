@@ -77,7 +77,7 @@ const Footer = () => {
                         <li>
                             <div className='contact-div' >
                                 <div className='logo-div' >
-                                    <img src={PhoneLogo} alt='phone-logo' />
+                                    < PhoneLogo/>
                                 </div>
                                 <div className='list-element'>
                                     {' '}+123456768910
@@ -87,7 +87,7 @@ const Footer = () => {
                         <li>
                             <div className='contact-div' >
                                 <div className='logo-div' >
-                                    <img src={EmailLogo} alt='email-logo' />
+                                    <EmailLogo />
                                 </div>
                                 <div className='list-element'>
                                     {' '}support@contosotraders.com

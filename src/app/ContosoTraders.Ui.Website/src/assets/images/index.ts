@@ -25,3 +25,4 @@ export { default as DesktopsIcon } from "./original/Contoso_Assets/Mega_menu_dro
 export { default as LaptopsIcon } from "./original/Contoso_Assets/Mega_menu_dropdown_assets/laptop_icon.svg";
 export { default as MobilesIcon } from "./original/Contoso_Assets/Mega_menu_dropdown_assets/mobiles_icon.svg";
 export { default as MonitorIcon } from "./original/Contoso_Assets/Mega_menu_dropdown_assets/monitor_icon.svg";
+export { default as OfferBanner} from "./original/Contoso_Assets/product_page_assets/collection_page_banner.jpg";

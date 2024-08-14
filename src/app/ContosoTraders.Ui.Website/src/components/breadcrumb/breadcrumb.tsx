@@ -1,8 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import './breadcrumb.scss'
 
-const Breadcrumb = ({parentPath, parentUrl, currentPath}) => {
+import React from "react";
+import { Link } from "react-router-dom";
+
+interface BreadcrumbProps {
+    parentPath?: string,
+    parentUrl?: string,
+    currentPath?: string,
+}
+
+const Breadcrumb = ({parentPath, parentUrl, currentPath}:BreadcrumbProps) => {
     return(
         <div className="breadcrump">
             <p>

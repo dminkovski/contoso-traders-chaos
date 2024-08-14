@@ -1,19 +1,19 @@
 import { Grid } from "@mui/material";
-import React from "react";
-import { OfferBanner, ListGrid, ListAside } from "./sections";
-import Breadcrump  from "../../components/breadcrumb/breadcrumb";
+import Breadcrumb  from "app/components/breadcrumb/breadcrumb";
 import { useLocation } from "react-router-dom";
 
-const List = ({ typesList, brandsList, onFilterChecked, productsList, loggedIn }) => {
+import { ListAside, ListGrid, OfferBanner } from "./sections";
+
+const List = ({ typesList, brandsList, onFilterChecked, productsList }) => {
     const location = useLocation();
-    const currentCategory = location.pathname.split("/").pop().replaceAll('-',' ');
+    const currentCategory = location?.pathname?.split("/")?.pop()?.replaceAll('-',' ');
 
     return (
         <div className="list">
             {currentCategory === 'all products'?
-            <Breadcrump currentPath='Product Collection' />
+            <Breadcrumb currentPath='Product Collection' />
             :
-            <Breadcrump parentPath='Product Collection' parentUrl="/list/all-products" currentPath={currentCategory} />}
+            <Breadcrumb parentPath='Product Collection' parentUrl="/list/all-products" currentPath={currentCategory} />}
             <OfferBanner />
             <div className="list__content">
                 <h6 className="mainHeading">{currentCategory}</h6>
