@@ -59,9 +59,7 @@ class CartService {
       try {
         const response: AxiosResponse<any> = await axios.post(
           `${this.API_PREFIX}/shoppingcart`,
-          {
-            cartItem: cartItem
-          } 
+          cartItem
         );
         return response.data;
       } catch (error) {

@@ -43,9 +43,7 @@ function DetailContainer(props) {
 
     const getQuantity = async () => {
         if (props.userInfo.token) {
-            const shoppingcart = await CartService.getShoppingCart(
-                props.userInfo.token
-            );
+            const shoppingcart = await CartService.getShoppingCart();
             if (shoppingcart) {
                 let quantity = shoppingcart.length;
                 props.getCartQuantity(quantity)
@@ -87,7 +85,7 @@ function DetailContainer(props) {
                 tempProps.quantity = qty;
                 Object.preventExtensions(tempProps);
                 setDetailProduct(tempProps)
-                const productToCart = await CartService.addProduct(props.userInfo.token, tempProps)
+                const productToCart = await CartService.addProduct(tempProps);
 
                 if (productToCart.errMessage) {
                     return showErrorMessage(productToCart)

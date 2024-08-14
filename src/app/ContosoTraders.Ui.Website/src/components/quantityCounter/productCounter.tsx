@@ -41,7 +41,7 @@ const QuantityPicker = ({
   }, [value]);
 
   const updateProductQty = useCallback(async () => {
-    if (page === 'cart') {
+    if (page === 'cart' &&  detailProduct.quantity != value) {
       if (isAuthenticated) {
         const response = await CartService.updateQuantity(detailProduct, value);
         if (response) {
