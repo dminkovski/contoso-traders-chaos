@@ -1,24 +1,24 @@
+import * as Constants from "app/config/constants";
 import axios from "axios";
 
-const UserService = { 
+class UserService { 
+    private static API_PREFIX = Constants.API_ENDPOINT;
 
-    async postLoginForm(formData) {
-        await ConfigService.loadSettings();
-        const response = await axios.post(`${ConfigService._apiUrl}/login`, formData, ConfigService.HeadersConfig());
+
+    static async postLoginForm(formData) {
+        const response = await axios.post(`${this.API_PREFIX}/login`, formData);
         return response;
-    },
+    };
 
-    async getUserInfoData(token) {
-        await ConfigService.loadSettings();
-        const response = await axios.get(`${ConfigService._apiUrl}/profiles/me`, ConfigService.HeadersConfig(token));
+    static async getUserInfoData() {
+        const response = await axios.get(`${this.API_PREFIX}/profiles/me`);
         return response.data;
-    },
+    };
 
-    async getProfileData(token) {
-        await ConfigService.loadSettings();
-        const response = await axios.get(`${ConfigService._apiUrl}/profiles/navbar/me`, ConfigService.HeadersConfig(token));
+    static async getProfileData() {
+        const response = await axios.get(`${this.API_PREFIX}/profiles/navbar/me`);
         return response.data;
-    }
+    };
 }
 
 

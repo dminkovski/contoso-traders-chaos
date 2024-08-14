@@ -4,6 +4,7 @@
  */
 
 import { LogLevel, PublicClientApplication } from "@azure/msal-browser";
+import * as Constants from "app/config/constants";
 
 /**
  * Configuration object to be passed to MSAL instance on creation. 
@@ -14,8 +15,8 @@ import { LogLevel, PublicClientApplication } from "@azure/msal-browser";
 const msalConfig = {
     auth: {
         validateAuthority: false,
-        clientId: import.meta.env.VITE_REACT_APP_B2CCLIENTID || "NO_CLIENT_SPECIFIED",
-        authority: import.meta.env.VITE_REACT_APP_B2CAUTHORITY || "https://login.microsoftonline.com",
+        clientId: Constants.B2C_CLIENT_ID || "NO_CLIENT_SPECIFIED",
+        authority: Constants.B2C_AUTHORITY_URL || "https://login.microsoftonline.com",
         redirectUri: `${window.location.origin}`
     },
     cache: {
@@ -56,7 +57,7 @@ const msalConfig = {
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
 export const loginRequest = {
-    scopes: [ "openid", "profile", import.meta.env.VITE_REACT_APP_B2CSCOPES]
+    scopes: [ "openid", "profile", Constants.B2C_SCOPES]
 };
 
 /**
