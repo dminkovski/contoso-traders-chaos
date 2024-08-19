@@ -23,7 +23,7 @@ module chaos2 '../chaos-experiments/chaos-keyvault-deny.bicep' = {
 }
 
 // Second experiment: Deny access to a Key Vault
-module chaos3 '../chaos-experiments/chaos-aks-down.bicep' = {
+module chaos3 '../chaos-experiments/chaos-aks-degradation.bicep' = {
   name: '${nameprefix}-chaos-3'
   params: {
     nameprefix: nameprefix
