@@ -77,7 +77,19 @@ resource chaosaksexperiment 'Microsoft.Chaos/experiments@2022-10-01-preview' = {
                 parameters: [
                   {
                     key: 'jsonSpec'
-                    value: '{"mode":"all","selector":{"namespaces":["default"],"labelSelectors":{"app":"contoso-traders-products"}},"stressors":{"cpu":{"workers":1,"load":100},"memory":{"workers":1,"size":"256MB"}}'
+                    value: '{"mode":"all","selector":{"namespaces":["default"],"labelSelectors":{"app":"contoso-traders-products"}},"stressors":{"cpu":{"workers":1,"load":100}}'
+                  }
+                ]
+              }
+              {
+                name: 'urn:csci:microsoft:azureKubernetesServiceChaosMesh:stressChaos/2.1'
+                type: 'continuous'
+                selectorId: chaosAksSelectorId
+                duration: 'PT5M'
+                parameters: [
+                  {
+                    key: 'jsonSpec'
+                    value: '{"mode":"all","selector":{"namespaces":["default"],"labelSelectors":{"app":"contoso-traders-products"}},"stressors":{"memory":{"workers":4,"size":"256MB"}}'
                   }
                 ]
               }
