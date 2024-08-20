@@ -1,11 +1,13 @@
-import React from "react";
+import './accordion.scss'
+
 import MuiAccordion from "@mui/material/Accordion";
-import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
+import React from "react";
+
 import description_off from "../../assets/images/original/Contoso_Assets/product_page_assets/description_off_icon.svg";
 import description_on from "../../assets/images/original/Contoso_Assets/product_page_assets/description_on_icon.svg";
-import './accordion.scss'
 
 const Accordion = (MuiAccordion);
 
@@ -17,7 +19,7 @@ export default function CustomizedAccordions(props) {
   const { accordionItems } = props
   const [expanded, setExpanded] = React.useState(null);
 
-  const handleChange = (panel) => (event, newExpanded) => {
+  const handleChange = (panel) => (_, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
 

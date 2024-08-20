@@ -1,9 +1,10 @@
-import React from 'react';
 import { useLocation } from 'react-router-dom';
+
 import Breadcrumb from '../../components/breadcrumb/breadcrumb';
-function Wishlist(props) {
+
+function Wishlist() {
     const location = useLocation();
-    const currentCategory = location.pathname.split("/").pop().replaceAll('-',' ');
+    const currentCategory = location?.pathname?.split("/")?.pop()?.replaceAll('-',' ');
 
     return (
         <div className="CartSection">

@@ -12,7 +12,7 @@ import useProductLogic from './product.logic';
 
 const Product = () => {
     const { state, actions } = useProductLogic();
-    const {product, alert, loading, isAuthenticated} = state;
+    const {product, alert, loading } = state;
     const {handleClose, addProductToCart, setQuantity} = actions;
 
     const accordionItems = [
@@ -112,7 +112,7 @@ const Product = () => {
                           <div>
                             <span className="prodattributes">Quantity</span>
                             <span>
-                              <QuantityPicker min={1} max={10} setQty={setQuantity} loggedIn={isAuthenticated}/>
+                              <QuantityPicker min={1} max={10} setQty={setQuantity} />
                             </span>
                           </div>
                           <div>

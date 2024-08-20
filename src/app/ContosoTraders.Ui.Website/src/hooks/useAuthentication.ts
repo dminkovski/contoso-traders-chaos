@@ -1,4 +1,3 @@
-import { AuthenticationResult } from "@azure/msal-browser";
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { loginRequest } from "app/config/msalConfig";
 import getStore, { IRootState } from "app/config/store";

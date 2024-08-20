@@ -1,6 +1,5 @@
 import './breadcrumb.scss'
 
-import React from "react";
 import { Link } from "react-router-dom";
 
 interface BreadcrumbProps {
@@ -14,7 +13,7 @@ const Breadcrumb = ({parentPath, parentUrl, currentPath}:BreadcrumbProps) => {
         <div className="breadcrump">
             <p>
                 <b><Link to='/'>Home</Link> / </b>
-                {parentPath ? <b><Link to={parentUrl}>{parentPath}</Link> / </b> : null}
+                {parentPath ? <b><Link to={parentUrl as string}>{parentPath}</Link> / </b> : null}
                 {currentPath ? <span>{currentPath}</span> : null}
             </p>
         </div>

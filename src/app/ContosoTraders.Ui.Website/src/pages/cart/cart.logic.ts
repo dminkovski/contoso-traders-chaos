@@ -1,8 +1,7 @@
 import { IRootState } from "app/config/store";
-import { getAccessToken } from "app/helpers/refreshJWTHelper";
 import { CartService } from "app/services";
 import { AuthenticationState } from "app/shared/reducers/authentication.reducer";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -58,8 +57,6 @@ const useCartLogic = () => {
       }
       setCartItems(items)
       setLoading(false)
-      let quantity = items.length;
-      //saveQuantity(quantity);
   }, [isAuthenticated])
 
   useEffect(() => {

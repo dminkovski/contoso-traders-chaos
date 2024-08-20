@@ -24,5 +24,13 @@ export default defineConfig({
     alias: [
       { find: 'app', replacement: path.resolve(__dirname, 'src') }
     ]
-  }
+  },
+  build: {
+  rollupOptions: {
+      input: {
+          main: path.resolve(__dirname, 'index.html'),
+      },
+  },
+  outDir: 'build'
+},
 })

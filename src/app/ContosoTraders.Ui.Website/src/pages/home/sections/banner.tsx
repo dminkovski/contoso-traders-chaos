@@ -1,8 +1,12 @@
 import { Grid } from "@mui/material";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function Banner(props) {
+interface BannerProps {
+  firstHeading: string;
+  secondHeading: string;
+}
+
+function Banner(props:BannerProps) {
   const history = useNavigate()
   const startShopping = () => {
     history('/list/controllers')

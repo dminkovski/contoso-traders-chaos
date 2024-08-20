@@ -1,61 +1,39 @@
-import React, { Fragment } from 'react';
-// import { withRouter } from 'react-router-dom';
-import LoadingSpinner from '../../components/loadingSpinner/loadingSpinner';
 import './list.scss'
-import List from './list';
-import { ProductService } from '../../services';
+
+import LoadingSpinner from 'app/components/loadingSpinner/loadingSpinner';
+import { ProductService } from 'app/services';
+import { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-// class ListContainer extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     typesList: [],
-  //     brandsList: [],
-  //     productsList: [],
-  //     queryString: '',
-  //     loading: true,
-  //   };
 
-  //   this.queryString = [
-  //     {
-  //       brand: [],
-  //       type: [],
-  //     },
-  //   ];
-  //   this.type = [];
-  //   this.brand = [];
-  // }
+import List from './list';
 
-  
-  const brand = []
+const brand:Array<any> = []
   function ListContainer() {
-    const [typesList, setTypesList] = React.useState([]);
-    const [brandsList, setBrandsList] = React.useState([]);
-    const [productsList, setProductsList] = React.useState('');
-    const queryString = 
+    const [typesList, setTypesList] = useState([]);
+    const [brandsList, setBrandsList] = useState([]);
+    const [productsList, setProductsList] = useState('');
+    const queryString: {
+      brand: any[];
+      type: any;
+  } = 
       {
         brand: brand,
         type: '',
       }
     ;
-    const [loading, setLoading] = React.useState(true);
-    const [getType, setType] = React.useState([]);
-    // const type = []
+    const [loading, setLoading] = useState(true);
+    const [getType, setType] = useState<Array<any>>([]);
     const { code } = useParams(); 
-    // React.useEffect(() => {
-    //   const filter = code || '';
-    //   getProductData(code);
-    //   // setPageState(filteredProductsPageData);
-    // }, []);
+    
   
-    React.useEffect(() => {
+    useEffect(() => {
         getProductData(code);
     }, [code]);// eslint-disable-line react-hooks/exhaustive-deps
 
   
-    const getProductData = async(type) => {
+    const getProductData = async(type:any) => {
       setType(type)
-      const filter = type === '' ? {} : (queryString.type = { type });
+      const filter = type === '' ? {} : (queryString.type = {type} );
       const filteredProductsPageData = await ProductService.getFilteredProducts(filter);
       setPageState(filteredProductsPageData.data)
       // return filteredProductsPageData.data;
@@ -75,7 +53,7 @@ import { useParams } from 'react-router-dom';
       setLoading(false);
     }
   
-     const onFilterChecked = async (e, value) => {
+     const onFilterChecked = async (e:any, value:any) => {
           const isChecked = e.target.checked;
           const dataType = e.target.getAttribute('id');
           setQueryStringState(isChecked, dataType, value);
@@ -85,7 +63,7 @@ import { useParams } from 'react-router-dom';
           setProductsList(apiCall.data.products)
     };
   
-    const setQueryStringState = (isChecked, dataType, value) => {
+    const setQueryStringState = (isChecked:boolean, dataType:any, value:any) => {
       if (isChecked) {
         brand.push(dataType);
         queryString.brand = brand;

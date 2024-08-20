@@ -1,6 +1,6 @@
 import { ControllersIcon, DesktopsIcon, LaptopsIcon, MobilesIcon, MonitorIcon } from "app/assets/images";
 import useAuthentication from 'app/hooks/useAuthentication';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const CATEGORIES = {
   title: 'All Categories',

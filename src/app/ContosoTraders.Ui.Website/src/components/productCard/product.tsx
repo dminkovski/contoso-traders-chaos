@@ -1,14 +1,13 @@
-import React from 'react';
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-// import WishlistIcon from '../../../../assets/images/original/Contoso_Assets/Icons/wishlist_icon.svg'
-import { useNavigate } from 'react-router-dom';
 import './product.scss'
 
-export default function Product(props) {
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
+
+const Product = (props) => {
   const navigate = useNavigate()
   const  { prodImg, imageUrl, name, price, id, type } = props;
   const productDetailPage = (id = 1) => {
@@ -16,10 +15,10 @@ export default function Product(props) {
   }
 
   const discountOffer = (price) => {
-    let dicsount = price - ((price/100)*15)
+    let dicsount:number = price*0.75;
     return(
       <Typography variant="h6" color="initial" component="h6" style={{marginRight:'auto'}} className="productOrgPrice m-0 mr-1">
-        ${parseInt(dicsount).toFixed(2)}
+        ${dicsount.toFixed(2)}
       </Typography>
     )
   }
@@ -55,3 +54,4 @@ export default function Product(props) {
     </Card>
   );
 }
+export default Product;

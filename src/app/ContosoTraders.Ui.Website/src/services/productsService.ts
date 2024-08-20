@@ -15,7 +15,7 @@ class ProductService {
         return response;
     };
 
-    static async getFilteredProducts(filters = {}) {        
+    static async getFilteredProducts(filters:any = {}) {        
         filters.type = filters.type.type === undefined ? filters.type : filters.type.type;
 
         const params = {

@@ -1,7 +1,5 @@
 import { Card, CardActionArea, CardContent, Grid } from "@mui/material";
 import { LaptopGirl, LaptopPic } from "app/assets/images";
-
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 function Gridsection() {

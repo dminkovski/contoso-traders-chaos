@@ -34,5 +34,5 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src/","vite.config.ts","types.d.ts"],
-  "exclude": ["node_modules", "public", "**/*.spec.ts", "**/*.spec.tsx"]  
+  "exclude": ["node_modules/", "tests","public", "**/*.spec.ts", "**/*.spec.tsx"]  
 }

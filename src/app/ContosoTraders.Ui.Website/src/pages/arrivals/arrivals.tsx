@@ -1,9 +1,9 @@
-import React from "react";
-
-import Slider from "../../components/slider/slider";
-import Banner from "../home/sections/banner";
 import './arrivals.scss'
-const Arrivals = (props) => {
+
+import Slider from "app/components/slider/slider";
+import Banner from "app/pages/home/sections/banner";
+
+const Arrivals = () => {
     return (
         <div className="arrivals">
             <Banner firstHeading="Newly Launched Lunar Shift Controller" secondHeading="Textured triggers and bumpers | Hybrid D-pad | Button mapping | Bluetooth® technology"/>

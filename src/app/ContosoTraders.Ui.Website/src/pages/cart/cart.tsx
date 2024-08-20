@@ -11,7 +11,7 @@ import useCartLogic from "./cart.logic";
 const Cart = () => {
   const { state , data, actions, refs } = useCartLogic();
   const { loading, grandTotal, cartItems, invalidCoupon, coupon, total, delivery, discountPrice } = state;
-  const { currentPath, parentPath, parentUrl, isAuthenticated } = data;
+  const { currentPath, parentPath, parentUrl } = data;
   const { navigate, removeFromCart, setCoupon, setDiscountPercentage, getCartItems, checkDiscount } = actions;
   const { textInput} = refs;
 
@@ -77,7 +77,7 @@ const Cart = () => {
                     <Grid item xs={12} container className="align-items-center">
                       <Grid item lg={2} md={2} xs={12} className="Productqty">
                         Qty&nbsp;&nbsp;
-                        <QuantityPicker max={10} min={1} qty={item.quantity} detailProduct={item} getCartItems={getCartItems} page="cart" loggedIn={isAuthenticated} />
+                        <QuantityPicker max={10} min={1} qty={item.quantity} detailProduct={item} getCartItems={getCartItems} page="cart" />
                       </Grid>
                       <Grid item lg={2} md={2} xs={12} className="Productprice">
                         <b className="cart-hidden-detail mt-2 mb-2 mr-2 d-lg-none  d-inline-block">Price : </b>${item.price?.toFixed(2)}

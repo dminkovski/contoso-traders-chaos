@@ -1,5 +1,4 @@
-import React from 'react';
-function MyAddressBook(props) {
+function MyAddressBook() {
     return ( 
         <div>
             Address

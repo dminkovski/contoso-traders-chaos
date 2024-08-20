@@ -1,7 +1,9 @@
-import React from 'react';
-
-function HeaderMessage(props) {
-    const { type, icon, message } = props
+interface HeaderMessageProps {
+    type: string;
+    icon: string;
+    message: string;
+}
+const HeaderMessage = ({ type, icon, message }:HeaderMessageProps) => {
     return ( 
         <div className={`headerMessageDiv ${type}`}>
             <img className='icon' src={icon} alt=""/>

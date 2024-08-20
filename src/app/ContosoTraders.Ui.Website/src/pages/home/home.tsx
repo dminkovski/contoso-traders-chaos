@@ -1,6 +1,6 @@
 import "./home.scss";
 
-import React, { useEffect } from "react";
+import React from "react";
 
 import Finalsection from "./sections/finalSection";
 import Gridsection from "./sections/gridSection";

@@ -1,12 +1,13 @@
-import { Button } from '@mui/material';
-import React from 'react';
-import errorpic from "../../assets/images/original/Contoso_Assets/404_page_assets/404_image.svg";
-import { useNavigate } from 'react-router-dom';
 import './errorPage.scss'
+
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+import errorpic from "../../assets/images/original/Contoso_Assets/404_page_assets/404_image.svg";
 
 const ErrorPage = () => {
     const history = useNavigate();
-    const redirectTo = (path) => {
+    const redirectTo = (path:string) => {
         history(path)
     }
     return (

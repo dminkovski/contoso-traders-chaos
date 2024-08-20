@@ -1,12 +1,14 @@
+import './imageSlider.scss'
+
+import { Button } from "@mui/material";
 import React from "react";
-import productdetailimg1 from "../../assets/images/original/Contoso_Assets/product_page_assets/product_image_main.jpg";
+
+import chevron_down from "../../assets/images/original/Contoso_Assets/product_page_assets/chevron_down.svg";
+import chevron_up from "../../assets/images/original/Contoso_Assets/product_page_assets/chevron_up.svg";
 import productdetailimg2 from "../../assets/images/original/Contoso_Assets/product_page_assets/image_2.jpg";
 import productdetailimg3 from "../../assets/images/original/Contoso_Assets/product_page_assets/image_3.jpg";
 import productdetailimg4 from "../../assets/images/original/Contoso_Assets/product_page_assets/image_4.jpg";
-import chevron_up from "../../assets/images/original/Contoso_Assets/product_page_assets/chevron_up.svg";
-import chevron_down from "../../assets/images/original/Contoso_Assets/product_page_assets/chevron_down.svg";
-import { Button } from "@mui/material";
-import './imageSlider.scss'
+import productdetailimg1 from "../../assets/images/original/Contoso_Assets/product_page_assets/product_image_main.jpg";
 
 function ImageSlider(props) {
   const [min, setMin] = React.useState(0)
@@ -59,7 +61,7 @@ function ImageSlider(props) {
       <div className="slidesection">
         <div className="slideimagelist">
           <div> <Button className={`${min === 0 ? "chevron_btn disabled" : "chevron_btn"} chevron_prevbtn`} disabled={min === 0 ? true : false} onClick={() => decrementMinMax()} ><img src={chevron_up} alt=""/></Button> </div>
-            {sliderImages.slice(min,max).map((item, key)=>(
+            {sliderImages.slice(min,max).map((item)=>(
                <div className={`${props.sliderImg === item.img ? "imgdiv active" : "imgdiv"}`}> <img src={item.img} alt="image1" className="slideimage" onClick={()=>props.setSliderImg(item.img)} /> </div>
             ))}
           <div> <Button className={`${max === sliderImages.length ? "chevron_btn disabled" : "chevron_btn"} chevron_nextbtn`} disabled={max === sliderImages.length ? true : false} onClick={() => incrementMinMax()} ><img src={chevron_down} alt=""/></Button> </div>

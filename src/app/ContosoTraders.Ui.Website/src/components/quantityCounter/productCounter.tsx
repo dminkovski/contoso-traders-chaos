@@ -12,9 +12,9 @@ interface QuantityPickerProps {
   min: number;
   max: number;
   page?: string;
-  detailProduct: CartItem;
+  detailProduct?: CartItem;
   setQty?: (value: number) => void;
-  getCartItems: () => void;
+  getCartItems?: () => void;
 }
 
 const QuantityPicker = ({
@@ -41,21 +41,23 @@ const QuantityPicker = ({
   }, [value]);
 
   const updateProductQty = useCallback(async () => {
-    if (page === 'cart' &&  detailProduct.quantity != value) {
+    if (page === 'cart' &&  detailProduct?.quantity != value) {
       if (isAuthenticated) {
-        const response = await CartService.updateQuantity(detailProduct, value);
-        if (response) {
+        const response = await CartService.updateQuantity(detailProduct as CartItem, value);
+        if (response && getCartItems) {
           getCartItems();
         }
       } else {
         let cartItems = JSON.parse(localStorage.getItem('cart_items') || '[]');
         const itemIndex = cartItems.findIndex(
-          (item: any) => item.productId === detailProduct.productId
+          (item: CartItem) => item.productId === detailProduct?.productId
         );
         if (itemIndex !== -1) {
           cartItems[itemIndex].quantity = value;
           localStorage.setItem('cart_items', JSON.stringify(cartItems));
-          getCartItems();
+          if (getCartItems) {
+            getCartItems();
+          }
         }
       }
     }

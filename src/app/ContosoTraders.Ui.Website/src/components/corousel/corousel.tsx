@@ -1,10 +1,9 @@
-import React from 'react';
-import Carousel from 'react-material-ui-carousel'
-import { Button, Grid } from '@mui/material'
 import './corousel.scss'
 
-export default function Corousel(props)
-{
+import { Button, Grid } from '@mui/material'
+import Carousel from 'react-material-ui-carousel'
+
+const Corousel = (props) => {
     const { items } = props;
 
     return (
@@ -90,3 +89,4 @@ function Item(props)
         </div>
     )
 }
+export default Corousel;

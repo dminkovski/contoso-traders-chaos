@@ -1,23 +1,29 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { connect } from 'react-redux';
+import './profile.scss';
+
+import NavigateNext from "@mui/icons-material/NavigateNext";
 import {
+  Avatar,
   Button,
   Grid,
-  Avatar,
 } from "@mui/material";
-import NavigateNext from "@mui/icons-material/NavigateNext";
-import PersonalInformation from "./personalInformation";
+import React from "react";
+import { connect } from 'react-redux';
+import { useParams } from "react-router-dom";
+
+import logout_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/logout_icon.svg";
+import personal_information_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/personal_information_icon.svg";
+import Breadcrump from "../../components/breadcrumb/breadcrumb";
+
 // import MyWishlist from "./MyWishlist";
 // import MyOrders from "./MyOrders";
 // import MyAddressBook from "./MyAddressBook";
-import logout_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/logout_icon.svg";
-import personal_information_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/personal_information_icon.svg";
+
+
 // import my_wishlist_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/my_wishlist_icon.svg";
 // import my_address_book_icons from "../../assets/images/original/Contoso_Assets/profile_page_assets/my_address_book_icons.svg";
 // import my_orders_icon from "../../assets/images/original/Contoso_Assets/profile_page_assets/my_orders_icon.svg";
-import Breadcrump from "../../components/breadcrumb/breadcrumb";
-import './profile.scss';
+
+
 
 const FormProfile = (props) => {
   const { page } = useParams()
@@ -127,7 +133,6 @@ const FormProfile = (props) => {
             </div>
           </Grid>
           <Grid item lg={9} md={8} xs={12} container>
-            {activeState === "personal" ?  <PersonalInformation/> : null}
             {/* {activeState === "orders" ?  <MyOrders/> : null}
             {activeState === "wishlist" ?  <MyWishlist/> : null}
             {activeState === "address" ?  <MyAddressBook/> : null} */}

@@ -1,13 +1,13 @@
-
-import React, { useRef, createRef } from "react";
-import MuiAccordion from "@mui/material/Accordion";
-import MuiAccordionSummary from "@mui/material/AccordionSummary";
-import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
-import description_off from '../../assets/images/original/Contoso_Assets/Icons/plus.png'
-import description_on from '../../assets/images/original/Contoso_Assets/Icons/minus.png'
+import MuiAccordion from "@mui/material/Accordion";
+import MuiAccordionDetails from "@mui/material/AccordionDetails";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+import React, { createRef, useRef } from "react";
 import { useParams } from "react-router-dom";
+
+import description_on from '../../assets/images/original/Contoso_Assets/Icons/minus.png'
+import description_off from '../../assets/images/original/Contoso_Assets/Icons/plus.png'
 
 const Accordion = (MuiAccordion);
 
@@ -23,7 +23,7 @@ export default function SidebarAccordion(props) {
   checkRef.current = props.data && props.data.map((_, i) => checkRef.current[i] ?? createRef());
   // const [color, setColorState] = React.useState({ blue : true });
   const [checkedItems, setCheckedItems] =  React.useState(new Map());
-  const handleChange = (panel) => (event, newExpanded) => {
+  const handleChange = (panel) => (_, newExpanded:boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
   // const handleColorChange = (event) => {
@@ -39,15 +39,15 @@ export default function SidebarAccordion(props) {
   React.useEffect(() => {
     
     if(code === 'all-products'){
-      props.data && props.data.forEach((item)=>{
+      props.data && props.data.forEach((item:any)=>{
         setCheckedItems(new Map().set(`brand${item.id}`, false));
       });
-      checkRef.current && checkRef.current.forEach((item)=>{
-        if(item.current.checked && item.current.checked === true){
-          item.current.checked = false;
-          let ele = item.current;
+      checkRef.current && checkRef.current.forEach((item:React.RefObject<HTMLInputElement>)=>{
+        if(item?.current?.checked){
+          (item as any).current.checked = false;
+          let ele:any | null = item.current;
           ele.target = item.current;
-          ele.target.name = item.current.name;
+          ele.target.name = item.current?.name;
           props.onFilterChecked(ele, dataType);
         }
       })      
@@ -83,7 +83,7 @@ export default function SidebarAccordion(props) {
               <Grid key={key} item xs={12} className="descpAttributes">
                 <input type='checkbox' 
                   className="MuiCheckbox-root"
-                  ref={checkRef.current[key]} 
+                  ref={checkRef.current[key] as React.RefObject<HTMLInputElement>} 
                   checked={checkedItems.get(`brand${item.id}`)} 
                   name={`brand${item.id}`} 
                   id={item.id}

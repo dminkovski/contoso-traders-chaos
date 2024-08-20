@@ -1,13 +1,13 @@
-import React from 'react';
-import Breadcrump from '../../components/breadcrumb/breadcrumb'
+import Breadcrumb from 'app/components/breadcrumb/breadcrumb'
 import { useLocation } from 'react-router-dom';
-const TermsOfService = (props) => {
+
+const TermsOfService = () => {
     const location = useLocation();
-    const currentCategory = location.pathname.split("/").pop().replaceAll('-',' ');
+    const currentCategory = location?.pathname?.split("/")?.pop()?.replaceAll('-',' ');
     return (
         <>
             <div className='refund-policy-section'>
-                <Breadcrump currentPath={currentCategory} />
+                <Breadcrumb currentPath={currentCategory} />
                 <div className="refund-policy">
                     <p className="mainHeading">Terms Of Service</p>
                     {/* <p className="subHeading">OVERVIEW</p> */}
