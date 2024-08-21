@@ -38,15 +38,10 @@ public class DependencyInjection : FunctionsStartup
     {
         var builder = WebApplication.CreateBuilder();
 
-        var credentialOptions = new DefaultAzureCredentialOptions
-        {
-            TenantId = "16b3c013-d300-468d-ac64-7eda0820b6d3"
-        };
-
         // if (builder.Environment.IsDevelopment())
         builder.Configuration.AddAzureKeyVault(
                 new Uri(builder.Configuration["KeyVaultEndpoint"]),
-                new DefaultAzureCredential(credentialOptions));
+                new DefaultAzureCredential());
         // else
         //     builder.Configuration.AddAzureKeyVault(
         //         new Uri(builder.Configuration["KeyVaultEndpoint"]),
