@@ -131,13 +131,13 @@ $darkgrey: #222222;
 
     color: var(--unnamed-color-ffffff);
     text-align: center;
-    font: normal normal medium 16px/21px var(--fontRoboto);
+    font: normal normal medium 16px/21px 'Roboto';
     letter-spacing: -0.36px;
     color: #ffffff;
 
     font-weight: 500;
     font-size: 16px;
-    font-family: var(--fontRoboto);
+    font-family: 'Roboto';
 }
 
 
@@ -181,7 +181,7 @@ $darkgrey: #222222;
 
 .LaptopSection .LaptopButton {
     text-align: center;
-    font: normal normal medium 16px/21px var(--fontRoboto);
+    font: normal normal medium 16px/21px 'Roboto';
     letter-spacing: -0.36px;
     color: #302f2f;
     text-transform: capitalize;
@@ -194,7 +194,7 @@ $darkgrey: #222222;
     border-radius: 5px;
     font-weight: 500;
     font-size: 16px;
-    font-family: var(--fontRoboto);
+    font-family: 'Roboto';
 }
 
 .LaptopSection .lapsecimage {
@@ -312,7 +312,7 @@ $darkgrey: #222222;
     border-radius: 5px;
     font-weight: 500;
     font-size: 16px;
-    font-family: var(--fontRoboto) !important;
+    font-family: 'Roboto' !important;
     margin-top: 34px;
 }
 

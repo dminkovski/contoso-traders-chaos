@@ -1,0 +1,39 @@
+name: Build Web UI
+
+env:
+on:
+  #Triggers the workflow on push events on the main branch
+  push:
+    branches: [ ui-update ]
+  #   paths-ignore:
+  #     - '*.md'
+  #     - '*.png'
+
+  # We also want to be able to run this manually from Github
+  workflow_dispatch:
+
+jobs:       
+  build-website:
+      name: 'Build Website'
+      runs-on: ubuntu-latest
+      steps:
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+        - name: Setup Node
+          uses: actions/setup-node@v3
+          with:
+            node-version: 20.15.0
+            cache: npm
+            cache-dependency-path: src/app/ContosoTraders.Ui.Website/package-lock.json
+        - name: Run NPM CI
+          run: npm ci
+          working-directory: src/app/ContosoTraders.Ui.Website
+        - name: NPM Run Build
+          run: npm run build
+          working-directory: src/app/ContosoTraders.Ui.Website
+        - name: Save build output
+          uses: actions/upload-artifact@v4
+          with:
+            name: websiteBuild
+            path: src/app/ContosoTraders.Ui.Website/build
+    
