@@ -533,7 +533,7 @@ jobs:
         - name: Setup Node
           uses: actions/setup-node@v3
           with:
-            node-version: 18
+            node-version: 20.15.0
             cache: npm
             cache-dependency-path: src/app/ContosoTraders.Ui.Website/package-lock.json
 
