@@ -23,9 +23,8 @@ jobs:
           with:
             node-version: 20.15.0
             cache: npm
-            cache-dependency-path: src/app/ContosoTraders.Ui.Website/package-lock.json
-        - name: Run NPM CI
-          run: npm ci
+        - name: Run NPM install
+          run: npm i
           working-directory: src/app/ContosoTraders.Ui.Website
         - name: NPM Run Build
           run: npm run build
