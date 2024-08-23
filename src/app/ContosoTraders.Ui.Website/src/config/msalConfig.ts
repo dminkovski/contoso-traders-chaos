@@ -15,8 +15,8 @@ import * as Constants from "app/config/constants";
 const msalConfig = {
     auth: {
         validateAuthority: false,
-        clientId: Constants.B2C_CLIENT_ID || "NO_CLIENT_SPECIFIED",
-        authority: Constants.B2C_AUTHORITY_URL || "https://login.microsoftonline.com",
+        clientId: Constants.CLIENT_ID || "NO_CLIENT_SPECIFIED",
+        authority: Constants.AUTHORITY_URL || "https://login.microsoftonline.com",
         redirectUri: `${window.location.origin}`
     },
     cache: {
@@ -57,7 +57,7 @@ const msalConfig = {
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
 export const loginRequest = {
-    scopes: [ "openid", "profile", Constants.B2C_SCOPES]
+    scopes: [ "openid", "profile", Constants.AUTH_SCOPES]
 };
 
 /**

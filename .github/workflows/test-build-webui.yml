@@ -1,19 +1,12 @@
-name: Build Web UI
+name: Test Build Web UI
 
 on:
-  #Triggers the workflow on push events on the main branch
-  push:
-    branches: [ ui-update ]
-  #   paths-ignore:
-  #     - '*.md'
-  #     - '*.png'
-
-  # We also want to be able to run this manually from Github
+  # Only for testing
   workflow_dispatch:
 
 jobs:       
-  build-website:
-      name: 'Build Website'
+  test-build-website:
+      name: 'Test Build Website'
       runs-on: ubuntu-latest
       steps:
         - name: 'Checkout GitHub Action'

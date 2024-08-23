@@ -1,70 +1,106 @@
-# Getting Started with Create React App
+# Contoso Traders UI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A Vite-based project using TypeScript, React, and Redux.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [Contoso Traders UI](#contoso-traders-ui)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Project Structure](#project-structure)
+  - [Configuration](#configuration)
+    - [Vite Configuration](#vite-configuration)
+  - [Environment Variables](#environment-variables)
+  - [Usage](#usage)
+  - [Build](#build)
+- [Contributing](#contributing)
+- [Trademarks](#trademarks)
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+To get started with the project, follow these steps:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **Clone the repository**:
+    ```bash
+    git clone
+    cd
+    ```
 
-### `npm test`
+2. **Install dependencies**:
+    ```bash
+    npm ci
+    ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Project Structure
 
-### `npm run build`
+Here is an overview of the project structure:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+├── index.html # Application entry point
+├── vite.config.ts # Vite configuration
+├── .env # Environment variables local
+├── .env.production # Environment variables for production
+├── tsconfig.json # TypeScript configuration
+├── package.json # Project dependencies and scripts
+├── package-lock.json # Project dependencies locked to version
+├── README.md # Project documentation
+src/
+│
+├── public/ # Static assets like images, favicon, etc. referenced from the index.html
+├── src/ # Source files
+│ ├── assets/ # SVGs, images etc.
+│ ├── components/ # React components
+│ ├── config/ # Redux store configuration, axios interceptors, middleware, MSAL
+│ ├── services/ # API services for the backend
+│ ├── index.tsx # React application entry point
+│ └── app.tsx # App component with routes
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Configuration
 
-### `npm run eject`
+The main configurations for the project are located in the `config/` folder.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Vite Configuration
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The Vite configuration is defined in `config/vite.config.ts`. You can modify this file to change how the development server, build process, and plugins behave.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Environment Variables
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Environment variables are managed using `.env` files. Create a `.env` file at the root of the project to define environment-specific variables.
+These variables can be accessed in your TypeScript and React files using `import.meta.env.VITE_VARIABLE_NAME`. You can see them in `config/constants.ts`
 
-## Learn More
+## Usage
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To start the development server:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm run dev
+```
 
-### Code Splitting
+This will start a Vite development server with hot-reloading, allowing you to see changes in real-time.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Build
+To build the project for production:
 
-### Analyzing the Bundle Size
+```bash
+npm run build
+```
+The output will be placed in the dist/ directory. The production build is optimized and minified.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+To preview the production build:
+```bash
+npm run preview
+```
 
-### Making a Progressive Web App
+This will start a local server to preview the built project.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# Contributing
+This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
-### Advanced Configuration
+When you submit a pull request, a CLA bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+This project has adopted the Microsoft Open Source Code of Conduct. For more information see the Code of Conduct FAQ or contact opencode@microsoft.com with any additional questions or comments.
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Trademarks
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow Microsoft's Trademark & Brand Guidelines. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party's policies.

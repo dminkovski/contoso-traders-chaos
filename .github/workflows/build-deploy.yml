@@ -528,7 +528,7 @@ jobs:
           with: 
             tokenPrefix: "{{"
             tokenSuffix: "}}"
-            files: ./src/app/ContosoTraders.Ui.Website/.env 
+            files: ./src/app/ContosoTraders.Ui.Website/.env.production 
 
         - name: Setup Node
           uses: actions/setup-node@v3
