@@ -113,6 +113,16 @@ module frontdoor './resources/frontdoor.bicep' = {
 }
 
 // We only deploy the Chaos experiments if deployChaos is set to true
+module uami './chaos-experiments/uami.bicep' = if (deployChaos) {
+  name: '${rg.name}-uami'
+  scope: rg
+  params: {
+    nameprefix: toLower(name)
+    location: rg.location
+  }
+}
+
+// We only deploy the Chaos experiments if deployChaos is set to true
 module chaos './resources/chaos.bicep' = if (deployChaos) {
   name: '${rg.name}-chaos'
   scope: rg
