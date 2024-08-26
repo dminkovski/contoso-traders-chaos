@@ -14,7 +14,6 @@ param zoneRedundant bool = false
 
 param deployChaos bool = true
 
-
 // The main resource group where all resources will be created
 resource rg 'Microsoft.Resources/resourceGroups@2020-06-01' = {
   name: '${name}-rg'
@@ -112,6 +111,38 @@ module frontdoor './resources/frontdoor.bicep' = {
   }
 }
 
+// We only deploy the User Assigned Manage Identity if deployChaos is set to true
+module uami './chaos-experiments/uami.bicep' = if (deployChaos) {
+  name: '${rg.name}-uami'
+  scope: rg
+  params: {
+    nameprefix: toLower(name)
+    location: rg.location
+  }
+}
+
+// We only deploy the Role Assigment for the main RG if deployChaos is set to true
+module roleassigmentrg './chaos-experiments/uami-roleassigment-rg.bicep' = if (deployChaos) {
+  name: '${rg.name}-roleassigmentrg'
+  scope: rg
+  params: {
+    uamiName: uami.outputs.userAssignedIdentityName
+  }
+}
+
+// We only deploy the Role Assigment for the VMSS RG if deployChaos is set to true
+module roleassigmentrgvmss './chaos-experiments/uami-roleassigment-rg.bicep' = if (deployChaos) {
+  name: '${rg.name}-roleassigmentrgvmss'
+  scope: resourceGroup('${name}-aks-rg')
+  params: {
+    uamiName: uami.outputs.userAssignedIdentityName
+  }
+  // We want to deploy this after the AKS:
+  dependsOn: [
+    containers
+  ]
+}
+
 // We only deploy the Chaos experiments if deployChaos is set to true
 module chaos './resources/chaos.bicep' = if (deployChaos) {
   name: '${rg.name}-chaos'
@@ -150,3 +181,4 @@ output sql_ServerName string = databases.outputs.sqlServerName
 output sql_ProfilesDatabaseName string = databases.outputs.sqlProfilesDatabaseName
 output sql_ProductsDatabaseName string = databases.outputs.sqlProductsDatabaseName
 output cosmos_StocksDatabaseName string = databases.outputs.cosmosStocksDatabaseName
+output userAssignedIdentityName string = uami.outputs.userAssignedIdentityName
