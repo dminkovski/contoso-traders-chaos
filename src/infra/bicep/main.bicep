@@ -127,6 +127,7 @@ module roleassigmentrg './chaos-experiments/uami-roleassigment-rg.bicep' = if (d
   scope: rg
   params: {
     uamiName: uami.outputs.userAssignedIdentityName
+    uamiRg: rg.name
   }
 }
 
@@ -136,6 +137,7 @@ module roleassigmentrgvmss './chaos-experiments/uami-roleassigment-rg.bicep' = i
   scope: resourceGroup('${name}-aks-rg')
   params: {
     uamiName: uami.outputs.userAssignedIdentityName
+    uamiRg: rg.name
   }
   // We want to deploy this after the AKS:
   dependsOn: [
