@@ -54,6 +54,7 @@ module deploymentScript '../chaos-experiments/aks-deploymentscript.bicep' = {
 // Forth experiment: AKS cluster zone down
 module chaos4 '../chaos-experiments/chaos-zone-down.bicep' = {
   name: '${nameprefix}-chaos-4'
+  scope: resourceGroup(aksClusterResourceGroup)
   params: {
     nameprefix: nameprefix
     location: location
