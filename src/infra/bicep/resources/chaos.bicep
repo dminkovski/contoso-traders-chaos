@@ -26,7 +26,7 @@ module chaos2 '../chaos-experiments/chaos-keyvault-deny.bicep' = {
   }
 }
 
-// Third experiment: Deny access to a Key Vault
+// Third experiment: Degradation of an AKS cluster
 module chaos3 '../chaos-experiments/chaos-aks-degradation.bicep' = {
   name: '${nameprefix}-chaos-3'
   params: {
@@ -35,7 +35,7 @@ module chaos3 '../chaos-experiments/chaos-aks-degradation.bicep' = {
   }
 }
 
-// Second experiment: Deny access to a Key Vault
+// Deployment Script: Get the VMSS Cluster Name
 module deploymentScript '../chaos-experiments/aks-deploymentscript.bicep' = {
   name: '${nameprefix}-deploymentScript'
   params: {
@@ -51,6 +51,14 @@ module deploymentScript '../chaos-experiments/aks-deploymentscript.bicep' = {
   ]
 }
 
-// References to next experiments to be added here. 
+// Forth experiment: AKS cluster zone down
+module chaos4 '../chaos-experiments/chaos-zone-down.bicep' = {
+  name: '${nameprefix}-chaos-4'
+  params: {
+    nameprefix: nameprefix
+    location: location
+    vmssClusterName: deploymentScript.outputs.vmssClusterName
+  }
+}
 
-output vmssClusterName string = deploymentScript.outputs.vmssClusterName
+// References to next experiments to be added here. 
