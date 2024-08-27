@@ -152,6 +152,8 @@ module chaos './resources/chaos.bicep' = if (deployChaos) {
   params: {
     nameprefix: toLower(name)
     location: rg.location
+    aksClusterResourceGroup: containers.outputs.aksClusterResourceGroup
+    uamiName: uami.outputs.userAssignedIdentityName
   }
   // We want to deploy this last:
   dependsOn: [
@@ -175,6 +177,7 @@ output acr_Name string = containers.outputs.acrName
 output keyvault_Name string = keyvault.outputs.keyvaultName
 output aksCluster_Name string = containers.outputs.aksClusterName
 output aksCluster_KubeletIdentityId string = containers.outputs.aksClusterKubeletIdentity
+output aksClusterResourceGroup string = containers.outputs.aksClusterResourceGroup
 output aca_AppName string = containers.outputs.acaAppName
 output aca_AppFqdn string = containers.outputs.acaAppFqdn
 output storage_AccountName_Images string = storage.outputs.imageStorageAccountName
