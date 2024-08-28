@@ -186,4 +186,3 @@ output sql_ServerName string = databases.outputs.sqlServerName
 output sql_ProfilesDatabaseName string = databases.outputs.sqlProfilesDatabaseName
 output sql_ProductsDatabaseName string = databases.outputs.sqlProductsDatabaseName
 output cosmos_StocksDatabaseName string = databases.outputs.cosmosStocksDatabaseName
-output userAssignedIdentityName string = uami.outputs.userAssignedIdentityName
