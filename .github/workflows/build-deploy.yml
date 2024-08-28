@@ -457,6 +457,16 @@ jobs:
           inlineScript: |
             az afd origin update --resource-group ${{ env.RG_NAME }}  --profile-name ${{ env.FRONTDOOR_NAME }} --origin-group-name origingroup-productsapi --name origin-productsapi --host-name ${{ env.PRODUCTS_FQDN }} --origin-host-header ${{ env.PRODUCTS_FQDN }}
 
+      - name: Install Chaos Mesh on the AKS cluster
+        run: |
+          helm repo add chaos-mesh https://charts.chaos-mesh.org
+          helm repo update
+          kubectl create ns chaos-testing
+          helm install chaos-mesh chaos-mesh/chaos-mesh \
+          --namespace=chaos-testing \
+          --set chaosDaemon.runtime=containerd \
+          --set chaosDaemon.socketPath=/run/containerd/containerd.sock
+
   deploy-carts-api:
     name: 'Deploy Carts API to ACA'
     needs: [deploy-infra, build-carts-api]
